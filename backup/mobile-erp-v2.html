@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile ERP - Interactive Prototype</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f0fdf4 0%, #ecfeff 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .phone-frame { width: 375px; height: 812px; background: #000; border-radius: 50px; padding: 12px; box-shadow: 0 50px 100px -20px rgba(0,0,0,0.25); position: relative; }
+        .phone-screen { width: 100%; height: 100%; background: #fff; border-radius: 40px; overflow: hidden; position: relative; }
+        .notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 150px; height: 30px; background: #000; border-radius: 0 0 20px 20px; z-index: 100; }
+        .status-bar { height: 44px; background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); display: flex; justify-content: space-between; align-items: center; padding: 0 20px; padding-top: 5px; color: white; font-size: 12px; font-weight: 600; }
+        .screen { display: none; height: calc(100% - 44px - 70px); overflow-y: auto; background: #f8fafc; }
+        .screen.active { display: block; }
+        .screen::-webkit-scrollbar { display: none; }
+        .header { background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); color: white; padding: 20px; padding-bottom: 30px; }
+        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .header h1 { font-size: 22px; font-weight: 700; }
+        .header p { font-size: 13px; opacity: 0.9; }
+        .header-icon { width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .card { background: white; border-radius: 16px; padding: 16px; margin: 12px 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .card-title { font-size: 14px; font-weight: 600; color: #1e293b; }
+        .card-action { font-size: 12px; color: #10b981; cursor: pointer; }
+        .kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 16px; margin-top: -20px; }
+        .kpi-card { background: white; border-radius: 16px; padding: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); cursor: pointer; transition: transform 0.2s; }
+        .kpi-card:hover { transform: translateY(-2px); }
+        .kpi-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; font-size: 18px; }
+        .kpi-icon.sales { background: linear-gradient(135deg, #10b981 0%, #34d399 100%); color: white; }
+        .kpi-icon.inventory { background: linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%); color: white; }
+        .kpi-icon.finance { background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%); color: white; }
+        .kpi-icon.vendor { background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); color: white; }
+        .kpi-value { font-size: 20px; font-weight: 700; color: #1e293b; }
+        .kpi-label { font-size: 12px; color: #64748b; margin-top: 4px; }
+        .kpi-change { font-size: 11px; color: #10b981; margin-top: 4px; }
+        .kpi-change.negative { color: #ef4444; }
+        .module-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 16px; }
+        .module-item { display: flex; flex-direction: column; align-items: center; padding: 12px 8px; cursor: pointer; border-radius: 12px; transition: background 0.2s; }
+        .module-item:hover { background: #f1f5f9; }
+        .module-icon { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 8px; }
+        .module-icon.green { background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); color: white; }
+        .module-icon.blue { background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%); color: white; }
+        .module-icon.purple { background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%); color: white; }
+        .module-icon.orange { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); color: white; }
+        .module-icon.teal { background: linear-gradient(135deg, #14b8a6 0%, #06b6d4 100%); color: white; }
+        .module-icon.pink { background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%); color: white; }
+        .module-icon.indigo { background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; }
+        .module-icon.amber { background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); color: white; }
+        .module-label { font-size: 11px; color: #475569; text-align: center; font-weight: 500; }
+        .list-item { display: flex; align-items: center; padding: 14px 16px; background: white; border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: background 0.2s; }
+        .list-item:hover { background: #f8fafc; }
+        .list-item:last-child { border-bottom: none; }
+        .list-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 14px; font-size: 18px; }
+        .list-content { flex: 1; }
+        .list-title { font-size: 14px; font-weight: 600; color: #1e293b; }
+        .list-subtitle { font-size: 12px; color: #64748b; margin-top: 2px; }
+        .list-value { text-align: right; }
+        .list-amount { font-size: 14px; font-weight: 600; color: #1e293b; }
+        .list-status { font-size: 11px; padding: 4px 8px; border-radius: 6px; margin-top: 4px; display: inline-block; }
+        .status-pending { background: #fef3c7; color: #d97706; }
+        .status-approved { background: #d1fae5; color: #059669; }
+        .status-urgent { background: #fee2e2; color: #dc2626; }
+        .status-info { background: #dbeafe; color: #2563eb; }
+        .bottom-nav { position: absolute; bottom: 0; left: 0; right: 0; height: 70px; background: white; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #e2e8f0; padding-bottom: 8px; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; padding: 8px 12px; border-radius: 12px; transition: all 0.2s; }
+        .nav-item i { font-size: 20px; color: #94a3b8; margin-bottom: 4px; }
+        .nav-item span { font-size: 10px; color: #94a3b8; font-weight: 500; }
+        .nav-item.active i, .nav-item.active span { color: #10b981; }
+        .nav-item.active { background: #ecfdf5; }
+        .fab { position: absolute; bottom: 85px; right: 20px; width: 56px; height: 56px; background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); cursor: pointer; transition: transform 0.2s; z-index: 50; }
+        .fab:hover { transform: scale(1.05); }
+        .sub-header { background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); color: white; padding: 16px 20px; display: flex; align-items: center; }
+        .back-btn { width: 36px; height: 36px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 14px; cursor: pointer; }
+        .sub-header h2 { font-size: 18px; font-weight: 600; flex: 1; }
+        .sub-header-action { width: 36px; height: 36px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .tabs { display: flex; background: white; padding: 8px; gap: 8px; border-bottom: 1px solid #e2e8f0; }
+        .tab { flex: 1; padding: 10px; text-align: center; font-size: 13px; font-weight: 500; color: #64748b; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+        .tab.active { background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); color: white; }
+        .stats-row { display: flex; gap: 12px; padding: 16px; overflow-x: auto; }
+        .stat-card { flex: 1; min-width: 100px; background: white; border-radius: 12px; padding: 14px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .stat-value { font-size: 18px; font-weight: 700; color: #1e293b; }
+        .stat-label { font-size: 11px; color: #64748b; margin-top: 4px; }
+        .section-title { font-size: 14px; font-weight: 600; color: #1e293b; padding: 16px 16px 8px; }
+        .avatar { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 16px; color: white; margin-right: 14px; }
+        .search-bar { margin: 16px; position: relative; }
+        .search-bar input { width: 100%; padding: 12px 14px 12px 44px; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 14px; background: white; outline: none; }
+        .search-bar i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
+        .quick-actions { display: flex; gap: 12px; padding: 0 16px; margin-bottom: 16px; }
+        .quick-action { flex: 1; padding: 14px; background: white; border-radius: 12px; text-align: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.04); transition: transform 0.2s; }
+        .quick-action:hover { transform: translateY(-2px); }
+        .quick-action i { font-size: 20px; color: #10b981; margin-bottom: 6px; display: block; }
+        .quick-action span { font-size: 11px; color: #64748b; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Modal Styles */
+        .modal-overlay { display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 200; justify-content: center; align-items: flex-end; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: white; border-radius: 24px 24px 0 0; width: 100%; max-height: 85%; overflow-y: auto; animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .modal-header { padding: 20px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: white; z-index: 10; }
+        .modal-title { font-size: 18px; font-weight: 600; color: #1e293b; }
+        .modal-close { width: 32px; height: 32px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .modal-body { padding: 20px; }
+        .form-group { margin-bottom: 16px; }
+        .form-label { font-size: 12px; font-weight: 500; color: #64748b; margin-bottom: 6px; display: block; }
+        .form-input { width: 100%; padding: 12px 14px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 14px; outline: none; transition: border-color 0.2s; }
+        .form-input:focus { border-color: #10b981; }
+        .form-select { width: 100%; padding: 12px 14px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 14px; outline: none; background: white; }
+        .btn { padding: 14px 24px; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; width: 100%; }
+        .btn-primary { background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); color: white; }
+        .btn-primary:hover { box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4); }
+        .btn-secondary { background: #f1f5f9; color: #64748b; }
+
+        /* Detail View */
+        .detail-header { background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); color: white; padding: 20px; text-align: center; }
+        .detail-avatar { width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,0.2); margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; font-size: 32px; }
+        .detail-name { font-size: 20px; font-weight: 700; }
+        .detail-subtitle { font-size: 14px; opacity: 0.9; margin-top: 4px; }
+        .detail-stats { display: flex; justify-content: space-around; padding: 16px; background: white; margin: -20px 16px 16px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .detail-stat { text-align: center; }
+        .detail-stat-value { font-size: 18px; font-weight: 700; color: #1e293b; }
+        .detail-stat-label { font-size: 11px; color: #64748b; }
+        .detail-section { padding: 0 16px 16px; }
+        .detail-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f1f5f9; }
+        .detail-row:last-child { border-bottom: none; }
+        .detail-label { font-size: 13px; color: #64748b; }
+        .detail-value { font-size: 13px; font-weight: 500; color: #1e293b; }
+
+        /* Toast */
+        .toast { position: absolute; bottom: 100px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 12px 24px; border-radius: 12px; font-size: 14px; display: none; z-index: 300; animation: fadeIn 0.3s ease; }
+        .toast.show { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+        /* Progress */
+        .progress-bar { height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); border-radius: 3px; transition: width 0.5s ease; }
+
+        /* Menu Drawer */
+        .menu-overlay { display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 200; }
+        .menu-overlay.active { display: block; }
+        .menu-drawer { position: absolute; top: 0; left: -280px; width: 280px; height: 100%; background: white; z-index: 201; transition: left 0.3s ease; border-radius: 0 40px 40px 0; overflow: hidden; }
+        .menu-drawer.active { left: 0; }
+        .menu-header { background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); padding: 50px 20px 30px; color: white; }
+        .menu-profile { display: flex; align-items: center; gap: 14px; }
+        .menu-avatar { width: 50px; height: 50px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .menu-name { font-size: 16px; font-weight: 600; }
+        .menu-role { font-size: 12px; opacity: 0.9; }
+        .menu-items { padding: 16px 0; }
+        .menu-item { display: flex; align-items: center; padding: 14px 20px; cursor: pointer; transition: background 0.2s; }
+        .menu-item:hover { background: #f1f5f9; }
+        .menu-item i { width: 24px; color: #64748b; margin-right: 14px; }
+        .menu-item span { font-size: 14px; color: #1e293b; }
+
+        /* Calendar */
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; padding: 16px; background: white; }
+        .calendar-nav { display: flex; gap: 8px; }
+        .calendar-nav button { width: 32px; height: 32px; border: none; background: #f1f5f9; border-radius: 8px; cursor: pointer; }
+        .calendar-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; padding: 0 16px 16px; background: white; }
+        .calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; border-radius: 8px; cursor: pointer; }
+        .calendar-day.header { font-size: 11px; color: #64748b; font-weight: 500; }
+        .calendar-day.today { background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); color: white; font-weight: 600; }
+        .calendar-day.has-event { background: #ecfdf5; color: #059669; }
+
+        /* Badge */
+        .visitor-badge { background: white; border-radius: 20px; padding: 24px; margin: 16px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .badge-photo { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; font-size: 32px; color: white; }
+        .badge-name { font-size: 20px; font-weight: 700; color: #1e293b; }
+        .badge-company { font-size: 14px; color: #64748b; margin-top: 4px; }
+        .badge-qr { width: 120px; height: 120px; background: #f1f5f9; margin: 20px auto; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .badge-info { display: flex; justify-content: space-around; margin-top: 16px; padding-top: 16px; border-top: 1px dashed #e2e8f0; }
+        .badge-info-item { text-align: center; }
+        .badge-info-label { font-size: 11px; color: #64748b; }
+        .badge-info-value { font-size: 13px; font-weight: 600; color: #1e293b; margin-top: 2px; }
+
+        /* Chart */
+        .chart-container { height: 150px; background: linear-gradient(180deg, #ecfdf5 0%, white 100%); border-radius: 12px; display: flex; align-items: flex-end; justify-content: space-around; padding: 16px; }
+        .chart-bar { width: 30px; background: linear-gradient(180deg, #10b981 0%, #06b6d4 100%); border-radius: 6px 6px 0 0; transition: height 0.5s ease; }
+
+        .role-selector { display: flex; gap: 8px; padding: 16px; overflow-x: auto; }
+        .role-chip { padding: 8px 16px; background: #f1f5f9; border-radius: 20px; font-size: 12px; font-weight: 500; color: #64748b; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+        .role-chip.active { background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); color: white; }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="phone-screen">
+            <div class="notch"></div>
+            <div class="status-bar">
+                <span>9:41</span>
+                <span><i class="fas fa-signal"></i> <i class="fas fa-wifi"></i> <i class="fas fa-battery-full"></i></span>
+            </div>
+
+            <!-- Toast Notification -->
+            <div class="toast" id="toast">Action completed successfully!</div>
+
+            <!-- Menu Overlay & Drawer -->
+            <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+            <div class="menu-drawer" id="menuDrawer">
+                <div class="menu-header">
+                    <div class="menu-profile">
+                        <div class="menu-avatar"><i class="fas fa-user"></i></div>
+                        <div>
+                            <div class="menu-name">Admin User</div>
+                            <div class="menu-role">Super Admin</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-items">
+                    <div class="menu-item" onclick="showScreen('dashboard'); toggleMenu();"><i class="fas fa-home"></i><span>Dashboard</span></div>
+                    <div class="menu-item" onclick="showScreen('sales'); toggleMenu();"><i class="fas fa-chart-line"></i><span>Sales & Invoicing</span></div>
+                    <div class="menu-item" onclick="showScreen('inventory'); toggleMenu();"><i class="fas fa-boxes"></i><span>Inventory</span></div>
+                    <div class="menu-item" onclick="showScreen('vendor'); toggleMenu();"><i class="fas fa-truck"></i><span>Vendor Management</span></div>
+                    <div class="menu-item" onclick="showScreen('finance'); toggleMenu();"><i class="fas fa-wallet"></i><span>Finance</span></div>
+                    <div class="menu-item" onclick="showScreen('maintenance'); toggleMenu();"><i class="fas fa-wrench"></i><span>Machine Maintenance</span></div>
+                    <div class="menu-item" onclick="showScreen('hr'); toggleMenu();"><i class="fas fa-users"></i><span>HR Management</span></div>
+                    <div class="menu-item" onclick="showScreen('incentives'); toggleMenu();"><i class="fas fa-gift"></i><span>Production Incentives</span></div>
+                    <div class="menu-item" onclick="showScreen('visitor'); toggleMenu();"><i class="fas fa-id-card"></i><span>Visitor Management</span></div>
+                </div>
+            </div>
+
+            <!-- Modal Overlay -->
+            <div class="modal-overlay" id="modalOverlay">
+                <div class="modal" id="modalContent"></div>
+            </div>
+
+            <!-- Dashboard Screen -->
+            <div class="screen active" id="dashboard">
+                <div class="header">
+                    <div class="header-top">
+                        <div><h1>Mobile ERP</h1><p>Good morning, Admin!</p></div>
+                        <div class="header-icon" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+                    </div>
+                </div>
+                <div class="kpi-grid">
+                    <div class="kpi-card" onclick="showScreen('sales')">
+                        <div class="kpi-icon sales"><i class="fas fa-dollar-sign"></i></div>
+                        <div class="kpi-value">₹12.4L</div>
+                        <div class="kpi-label">Today's Sales</div>
+                        <div class="kpi-change">↑ 12% from yesterday</div>
+                    </div>
+                    <div class="kpi-card" onclick="showScreen('inventory')">
+                        <div class="kpi-icon inventory"><i class="fas fa-boxes"></i></div>
+                        <div class="kpi-value">847</div>
+                        <div class="kpi-label">Items in Stock</div>
+                        <div class="kpi-change negative">↓ 23 low stock alerts</div>
+                    </div>
+                    <div class="kpi-card" onclick="showScreen('finance')">
+                        <div class="kpi-icon finance"><i class="fas fa-file-invoice"></i></div>
+                        <div class="kpi-value">₹8.2L</div>
+                        <div class="kpi-label">Pending Payments</div>
+                        <div class="kpi-change">15 invoices due</div>
+                    </div>
+                    <div class="kpi-card" onclick="showScreen('vendor')">
+                        <div class="kpi-icon vendor"><i class="fas fa-truck"></i></div>
+                        <div class="kpi-value">12</div>
+                        <div class="kpi-label">Pending POs</div>
+                        <div class="kpi-change">3 ASN to verify</div>
+                    </div>
+                </div>
+                <div class="role-selector">
+                    <div class="role-chip active" onclick="selectRole(this)">All</div>
+                    <div class="role-chip" onclick="selectRole(this)">Owner</div>
+                    <div class="role-chip" onclick="selectRole(this)">Sales</div>
+                    <div class="role-chip" onclick="selectRole(this)">Operations</div>
+                    <div class="role-chip" onclick="selectRole(this)">HR</div>
+                </div>
+                <div class="section-title">Quick Access</div>
+                <div class="module-grid">
+                    <div class="module-item" onclick="showScreen('sales')"><div class="module-icon green"><i class="fas fa-file-invoice-dollar"></i></div><div class="module-label">Sales</div></div>
+                    <div class="module-item" onclick="showScreen('inventory')"><div class="module-icon blue"><i class="fas fa-warehouse"></i></div><div class="module-label">Inventory</div></div>
+                    <div class="module-item" onclick="showScreen('vendor')"><div class="module-icon orange"><i class="fas fa-truck-loading"></i></div><div class="module-label">Vendors</div></div>
+                    <div class="module-item" onclick="showScreen('finance')"><div class="module-icon purple"><i class="fas fa-wallet"></i></div><div class="module-label">Finance</div></div>
+                    <div class="module-item" onclick="showScreen('maintenance')"><div class="module-icon teal"><i class="fas fa-tools"></i></div><div class="module-label">Maintenance</div></div>
+                    <div class="module-item" onclick="showScreen('hr')"><div class="module-icon pink"><i class="fas fa-user-friends"></i></div><div class="module-label">HR</div></div>
+                    <div class="module-item" onclick="showScreen('incentives')"><div class="module-icon indigo"><i class="fas fa-award"></i></div><div class="module-label">Incentives</div></div>
+                    <div class="module-item" onclick="showScreen('visitor')"><div class="module-icon amber"><i class="fas fa-id-badge"></i></div><div class="module-label">Visitors</div></div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><div class="card-title">Sales Trend (Last 7 Days)</div><div class="card-action" onclick="showScreen('sales')">View All</div></div>
+                    <div class="chart-container">
+                        <div class="chart-bar" style="height: 60%"></div>
+                        <div class="chart-bar" style="height: 80%"></div>
+                        <div class="chart-bar" style="height: 45%"></div>
+                        <div class="chart-bar" style="height: 90%"></div>
+                        <div class="chart-bar" style="height: 70%"></div>
+                        <div class="chart-bar" style="height: 85%"></div>
+                        <div class="chart-bar" style="height: 95%"></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><div class="card-title">Recent Activities</div><div class="card-action">See All</div></div>
+                    <div class="list-item" onclick="openInvoiceDetail('INV-1234', 'ABC Corp', '45,000', 'Paid')">
+                        <div class="list-icon" style="background: #ecfdf5; color: #10b981;"><i class="fas fa-check"></i></div>
+                        <div class="list-content"><div class="list-title">Invoice #1234 Paid</div><div class="list-subtitle">ABC Corp • 10 mins ago</div></div>
+                        <div class="list-value"><div class="list-amount">₹45,000</div></div>
+                    </div>
+                    <div class="list-item" onclick="openPODetail('PO-892', 'Steel Suppliers', 'Pending GRN')">
+                        <div class="list-icon" style="background: #fef3c7; color: #f59e0b;"><i class="fas fa-truck"></i></div>
+                        <div class="list-content"><div class="list-title">PO #892 Received</div><div class="list-subtitle">Steel Suppliers • 1 hour ago</div></div>
+                        <div class="list-value"><span class="list-status status-pending">Pending GRN</span></div>
+                    </div>
+                    <div class="list-item" onclick="openBreakdownDetail('Machine #5', 'Spindle Error')">
+                        <div class="list-icon" style="background: #fee2e2; color: #ef4444;"><i class="fas fa-exclamation"></i></div>
+                        <div class="list-content"><div class="list-title">Machine #5 Breakdown</div><div class="list-subtitle">CNC Unit • 2 hours ago</div></div>
+                        <div class="list-value"><span class="list-status status-urgent">Urgent</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sales Screen -->
+            <div class="screen" id="sales">
+                <div class="sub-header">
+                    <div class="back-btn" onclick="showScreen('dashboard')"><i class="fas fa-arrow-left"></i></div>
+                    <h2>Sales & Invoicing</h2>
+                    <div class="sub-header-action" onclick="openModal('search')"><i class="fas fa-search"></i></div>
+                </div>
+                <div class="tabs" id="salesTabs">
+                    <div class="tab active" onclick="switchTab('salesTabs', 'salesContent', 0)">Pipeline</div>
+                    <div class="tab" onclick="switchTab('salesTabs', 'salesContent', 1)">Invoices</div>
+                    <div class="tab" onclick="switchTab('salesTabs', 'salesContent', 2)">Ledger</div>
+                </div>
+                <div id="salesContent">
+                    <!-- Pipeline Tab -->
+                    <div class="tab-content active">
+                        <div class="stats-row">
+                            <div class="stat-card"><div class="stat-value" style="color: #10b981;">₹45L</div><div class="stat-label">This Month</div></div>
+                            <div class="stat-card"><div class="stat-value" style="color: #f59e0b;">₹12L</div><div class="stat-label">Outstanding</div></div>
+                            <div class="stat-card"><div class="stat-value" style="color: #3b82f6;">24</div><div class="stat-label">Active Quotes</div></div>
+                        </div>
+                        <div class="quick-actions">
+                            <div class="quick-action" onclick="openModal('quote')"><i class="fas fa-plus"></i><span>New Quote</span></div>
+                            <div class="quick-action" onclick="openModal('invoice')"><i class="fas fa-file-invoice"></i><span>Create Invoice</span></div>
+                            <div class="quick-action" onclick="openModal('customer')"><i class="fas fa-user-plus"></i><span>Add Customer</span></div>
+                        </div>
+                        <div class="section-title">Sales Pipeline</div>
+                        <div class="list-item" onclick="openCustomerDetail('ABC Corporation', 'AC', 'Machinery Parts', '2,50,000', 'Quote Sent')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #10b981, #06b6d4);">AC</div>
+                            <div class="list-content"><div class="list-title">ABC Corporation</div><div class="list-subtitle">Machinery Parts • Quote Sent</div></div>
+                            <div class="list-value"><div class="list-amount">₹2,50,000</div><span class="list-status status-info">Follow-up</span></div>
+                        </div>
+                        <div class="list-item" onclick="openCustomerDetail('Tech Industries', 'TI', 'Raw Materials', '5,80,000', 'Negotiation')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">TI</div>
+                            <div class="list-content"><div class="list-title">Tech Industries</div><div class="list-subtitle">Raw Materials • Negotiation</div></div>
+                            <div class="list-value"><div class="list-amount">₹5,80,000</div><span class="list-status status-pending">Hot Lead</span></div>
+                        </div>
+                        <div class="list-item" onclick="openCustomerDetail('Global Mfg Ltd', 'GM', 'Equipment', '8,40,000', 'Order Confirmed')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">GM</div>
+                            <div class="list-content"><div class="list-title">Global Mfg Ltd</div><div class="list-subtitle">Equipment • Order Confirmed</div></div>
+                            <div class="list-value"><div class="list-amount">₹8,40,000</div><span class="list-status status-approved">Won</span></div>
+                        </div>
+                    </div>
+                    <!-- Invoices Tab -->
+                    <div class="tab-content">
+                        <div class="section-title">Recent Invoices</div>
+                        <div class="list-item" onclick="openInvoiceDetail('INV-2024-1234', 'ABC Corp', '45,000', 'Paid')">
+                            <div class="list-icon" style="background: #ecfdf5; color: #10b981;"><i class="fas fa-file-invoice"></i></div>
+                            <div class="list-content"><div class="list-title">INV-2024-1234</div><div class="list-subtitle">ABC Corp • Due: 15 Feb</div></div>
+                            <div class="list-value"><div class="list-amount">₹45,000</div><span class="list-status status-approved">Paid</span></div>
+                        </div>
+                        <div class="list-item" onclick="openInvoiceDetail('INV-2024-1235', 'Tech Industries', '1,20,000', 'Pending')">
+                            <div class="list-icon" style="background: #fef3c7; color: #f59e0b;"><i class="fas fa-file-invoice"></i></div>
+                            <div class="list-content"><div class="list-title">INV-2024-1235</div><div class="list-subtitle">Tech Ind • Due: 20 Feb</div></div>
+                            <div class="list-value"><div class="list-amount">₹1,20,000</div><span class="list-status status-pending">Pending</span></div>
+                        </div>
+                        <div class="list-item" onclick="openInvoiceDetail('INV-2024-1236', 'Global Mfg', '2,80,000', 'Overdue')">
+                            <div class="list-icon" style="background: #fee2e2; color: #ef4444;"><i class="fas fa-file-invoice"></i></div>
+                            <div class="list-content"><div class="list-title">INV-2024-1236</div><div class="list-subtitle">Global Mfg • Due: 10 Feb</div></div>
+                            <div class="list-value"><div class="list-amount">₹2,80,000</div><span class="list-status status-urgent">Overdue</span></div>
+                        </div>
+                    </div>
+                    <!-- Ledger Tab -->
+                    <div class="tab-content">
+                        <div class="search-bar"><i class="fas fa-search"></i><input type="text" placeholder="Search customer..."></div>
+                        <div class="section-title">Customer Ledger</div>
+                        <div class="list-item" onclick="openLedgerDetail('ABC Corporation', '12,50,000', '2,50,000')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #10b981, #06b6d4);">AC</div>
+                            <div class="list-content"><div class="list-title">ABC Corporation</div><div class="list-subtitle">Total Business: ₹12,50,000</div></div>
+                            <div class="list-value"><div class="list-amount" style="color: #ef4444;">₹2,50,000</div><div class="list-subtitle">Outstanding</div></div>
+                        </div>
+                        <div class="list-item" onclick="openLedgerDetail('Tech Industries', '8,40,000', '0')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">TI</div>
+                            <div class="list-content"><div class="list-title">Tech Industries</div><div class="list-subtitle">Total Business: ₹8,40,000</div></div>
+                            <div class="list-value"><div class="list-amount" style="color: #10b981;">₹0</div><div class="list-subtitle">Clear</div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fab" onclick="openModal('invoice')"><i class="fas fa-plus"></i></div>
+            </div>
+
+            <!-- Inventory Screen -->
+            <div class="screen" id="inventory">
+                <div class="sub-header">
+                    <div class="back-btn" onclick="showScreen('dashboard')"><i class="fas fa-arrow-left"></i></div>
+                    <h2>Inventory</h2>
+                    <div class="sub-header-action" onclick="openModal('scan')"><i class="fas fa-qrcode"></i></div>
+                </div>
+                <div class="tabs" id="invTabs">
+                    <div class="tab active" onclick="switchTab('invTabs', 'invContent', 0)">Stock</div>
+                    <div class="tab" onclick="switchTab('invTabs', 'invContent', 1)">Requests</div>
+                    <div class="tab" onclick="switchTab('invTabs', 'invContent', 2)">Issues</div>
+                </div>
+                <div id="invContent">
+                    <!-- Stock Tab -->
+                    <div class="tab-content active">
+                        <div class="search-bar"><i class="fas fa-search"></i><input type="text" placeholder="Search items, SKU..."></div>
+                        <div class="stats-row">
+                            <div class="stat-card"><div class="stat-value">847</div><div class="stat-label">Total Items</div></div>
+                            <div class="stat-card"><div class="stat-value" style="color: #ef4444;">23</div><div class="stat-label">Low Stock</div></div>
+                            <div class="stat-card"><div class="stat-value">3</div><div class="stat-label">Warehouses</div></div>
+                        </div>
+                        <div class="section-title">Low Stock Alerts</div>
+                        <div class="list-item" onclick="openStockDetail('Steel Rod 10mm', 'SR-10MM', '15', '100', 'Warehouse A')">
+                            <div class="list-icon" style="background: #fee2e2; color: #ef4444;"><i class="fas fa-exclamation-triangle"></i></div>
+                            <div class="list-content"><div class="list-title">Steel Rod 10mm</div><div class="list-subtitle">SKU: SR-10MM • Warehouse A</div></div>
+                            <div class="list-value"><div class="list-amount">15 pcs</div><span class="list-status status-urgent">Critical</span></div>
+                        </div>
+                        <div class="list-item" onclick="openStockDetail('Lubricant Oil 5L', 'LO-5L', '8', '50', 'Warehouse B')">
+                            <div class="list-icon" style="background: #fef3c7; color: #f59e0b;"><i class="fas fa-exclamation-triangle"></i></div>
+                            <div class="list-content"><div class="list-title">Lubricant Oil 5L</div><div class="list-subtitle">SKU: LO-5L • Warehouse B</div></div>
+                            <div class="list-value"><div class="list-amount">8 units</div><span class="list-status status-pending">Low</span></div>
+                        </div>
+                        <div class="list-item" onclick="openStockDetail('Bearing 6205', 'BR-6205', '25', '100', 'Warehouse A')">
+                            <div class="list-icon" style="background: #fef3c7; color: #f59e0b;"><i class="fas fa-exclamation-triangle"></i></div>
+                            <div class="list-content"><div class="list-title">Bearing 6205</div><div class="list-subtitle">SKU: BR-6205 • Warehouse A</div></div>
+                            <div class="list-value"><div class="list-amount">25 pcs</div><span class="list-status status-pending">Low</span></div>
+                        </div>
+                    </div>
+                    <!-- Requests Tab -->
+                    <div class="tab-content">
+                        <div class="section-title">Pending Requests</div>
+                        <div class="list-item" onclick="openMRDetail('MR-2024-089', 'Production Line A', '5', 'Pending')">
+                            <div class="list-icon" style="background: #dbeafe; color: #3b82f6;"><i class="fas fa-clipboard-list"></i></div>
+                            <div class="list-content"><div class="list-title">MR-2024-089</div><div class="list-subtitle">Production Line A • 5 items</div></div>
+                            <div class="list-value"><span class="list-status status-pending">Pending</span></div>
+                        </div>
+                        <div class="list-item" onclick="openMRDetail('MR-2024-088', 'Maintenance', '3', 'Approved')">
+                            <div class="list-icon" style="background: #ecfdf5; color: #10b981;"><i class="fas fa-clipboard-check"></i></div>
+                            <div class="list-content"><div class="list-title">MR-2024-088</div><div class="list-subtitle">Maintenance • 3 items</div></div>
+                            <div class="list-value"><span class="list-status status-approved">Approved</span></div>
+                        </div>
+                    </div>
+                    <!-- Issues Tab -->
+                    <div class="tab-content">
+                        <div class="section-title">Recent Issues</div>
+                        <div class="list-item" onclick="openIssueDetail('MI-2024-045', 'Production Line B', '8')">
+                            <div class="list-icon" style="background: #ecfdf5; color: #10b981;"><i class="fas fa-dolly"></i></div>
+                            <div class="list-content"><div class="list-title">MI-2024-045</div><div class="list-subtitle">Production Line B • 8 items</div></div>
+                            <div class="list-value"><span class="list-status status-approved">Issued</span></div>
+                        </div>
+                        <div class="list-item" onclick="openIssueDetail('MI-2024-044', 'Maintenance Dept', '4')">
+                            <div class="list-icon" style="background: #ecfdf5; color: #10b981;"><i class="fas fa-dolly"></i></div>
+                            <div class="list-content"><div class="list-title">MI-2024-044</div><div class="list-subtitle">Maintenance Dept • 4 items</div></div>
+                            <div class="list-value"><span class="list-status status-approved">Issued</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fab" onclick="openModal('materialRequest')"><i class="fas fa-plus"></i></div>
+            </div>
+
+            <!-- Vendor Screen -->
+            <div class="screen" id="vendor">
+                <div class="sub-header">
+                    <div class="back-btn" onclick="showScreen('dashboard')"><i class="fas fa-arrow-left"></i></div>
+                    <h2>Vendor Management</h2>
+                </div>
+                <div class="tabs" id="vendorTabs">
+                    <div class="tab active" onclick="switchTab('vendorTabs', 'vendorContent', 0)">Vendors</div>
+                    <div class="tab" onclick="switchTab('vendorTabs', 'vendorContent', 1)">POs</div>
+                    <div class="tab" onclick="switchTab('vendorTabs', 'vendorContent', 2)">ASN/GRN</div>
+                </div>
+                <div id="vendorContent">
+                    <!-- Vendors Tab -->
+                    <div class="tab-content active">
+                        <div class="quick-actions">
+                            <div class="quick-action" onclick="openModal('po')"><i class="fas fa-plus"></i><span>New PO</span></div>
+                            <div class="quick-action" onclick="openModal('asn')"><i class="fas fa-shipping-fast"></i><span>Create ASN</span></div>
+                            <div class="quick-action" onclick="openModal('grn')"><i class="fas fa-clipboard-check"></i><span>New GRN</span></div>
+                        </div>
+                        <div class="section-title">Top Vendors</div>
+                        <div class="list-item" onclick="openVendorDetail('Steel Suppliers Ltd', 'SS', '98%', '15,00,000')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #10b981, #06b6d4);">SS</div>
+                            <div class="list-content"><div class="list-title">Steel Suppliers Ltd</div><div class="list-subtitle">Rating: ★★★★★ • 98% On-time</div></div>
+                            <div class="list-value"><div class="list-amount">₹15L</div><div class="list-subtitle">This Month</div></div>
+                        </div>
+                        <div class="list-item" onclick="openVendorDetail('Parts Corporation', 'PC', '92%', '8,50,000')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">PC</div>
+                            <div class="list-content"><div class="list-title">Parts Corporation</div><div class="list-subtitle">Rating: ★★★★☆ • 92% On-time</div></div>
+                            <div class="list-value"><div class="list-amount">₹8.5L</div><div class="list-subtitle">This Month</div></div>
+                        </div>
+                    </div>
+                    <!-- POs Tab -->
+                    <div class="tab-content">
+                        <div class="section-title">Active Purchase Orders</div>
+                        <div class="list-item" onclick="openPODetail('PO-2024-892', 'Steel Suppliers', 'In Transit')">
+                            <div class="list-icon" style="background: #dbeafe; color: #3b82f6;"><i class="fas fa-file-alt"></i></div>
+                            <div class="list-content"><div class="list-title">PO-2024-892</div><div class="list-subtitle">Steel Suppliers • 12 items</div></div>
+                            <div class="list-value"><div class="list-amount">₹3,50,000</div><span class="list-status status-info">In Transit</span></div>
+                        </div>
+                        <div class="list-item" onclick="openPODetail('PO-2024-891', 'Parts Corp', 'Confirmed')">
+                            <div class="list-icon" style="background: #ecfdf5; color: #10b981;"><i class="fas fa-file-alt"></i></div>
+                            <div class="list-content"><div class="list-title">PO-2024-891</div><div class="list-subtitle">Parts Corp • 8 items</div></div>
+                            <div class="list-value"><div class="list-amount">₹1,80,000</div><span class="list-status status-approved">Confirmed</span></div>
+                        </div>
+                    </div>
+                    <!-- ASN/GRN Tab -->
+                    <div class="tab-content">
+                        <div class="section-title">Pending Verifications</div>
+                        <div class="list-item" onclick="openASNDetail('ASN-2024-156', 'Steel Suppliers', 'At Gate')">
+                            <div class="list-icon" style="background: #fef3c7; color: #f59e0b;"><i class="fas fa-truck"></i></div>
+                            <div class="list-content"><div class="list-title">ASN-2024-156</div><div class="list-subtitle">Steel Suppliers • Vehicle: MH12AB1234</div></div>
+                            <div class="list-value"><span class="list-status status-pending">Verify at Gate</span></div>
+                        </div>
+                        <div class="section-title">Recent GRNs</div>
+                        <div class="list-item" onclick="openGRNDetail('GRN-2024-089', 'Parts Corp', 'Completed')">
+                            <div class="list-icon" style="background: #ecfdf5; color: #10b981;"><i class="fas fa-clipboard-check"></i></div>
+                            <div class="list-content"><div class="list-title">GRN-2024-089</div><div class="list-subtitle">Parts Corp • 8 items received</div></div>
+                            <div class="list-value"><span class="list-status status-approved">Completed</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fab" onclick="openModal('po')"><i class="fas fa-plus"></i></div>
+            </div>
+
+            <!-- Finance Screen -->
+            <div class="screen" id="finance">
+                <div class="sub-header">
+                    <div class="back-btn" onclick="showScreen('dashboard')"><i class="fas fa-arrow-left"></i></div>
+                    <h2>Finance</h2>
+                </div>
+                <div class="tabs" id="finTabs">
+                    <div class="tab active" onclick="switchTab('finTabs', 'finContent', 0)">Payables</div>
+                    <div class="tab" onclick="switchTab('finTabs', 'finContent', 1)">Receivables</div>
+                    <div class="tab" onclick="switchTab('finTabs', 'finContent', 2)">Reports</div>
+                </div>
+                <div id="finContent">
+                    <div class="tab-content active">
+                        <div class="card">
+                            <div class="card-title" style="margin-bottom: 16px;">Payment Summary</div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                                <div><div style="font-size: 24px; font-weight: 700; color: #ef4444;">₹8.2L</div><div style="font-size: 12px; color: #64748b;">Total Payables</div></div>
+                                <div style="text-align: right;"><div style="font-size: 24px; font-weight: 700; color: #10b981;">₹12.4L</div><div style="font-size: 12px; color: #64748b;">Total Receivables</div></div>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill" style="width: 65%;"></div></div>
+                            <div style="display: flex; justify-content: space-between; font-size: 11px; color: #64748b; margin-top: 4px;"><span>Paid: ₹5.2L</span><span>Pending: ₹3L</span></div>
+                        </div>
+                        <div class="section-title">Upcoming Payments</div>
+                        <div class="list-item" onclick="openPaymentDetail('Steel Suppliers Ltd', 'INV-445', '2,50,000', 'Overdue')">
+                            <div class="list-icon" style="background: #fee2e2; color: #ef4444;"><i class="fas fa-calendar-times"></i></div>
+                            <div class="list-content"><div class="list-title">Steel Suppliers Ltd</div><div class="list-subtitle">Invoice #INV-445 • Overdue</div></div>
+                            <div class="list-value"><div class="list-amount">₹2,50,000</div><span class="list-status status-urgent">Pay Now</span></div>
+                        </div>
+                        <div class="list-item" onclick="openPaymentDetail('Parts Corporation', 'INV-446', '1,80,000', '3 Days')">
+                            <div class="list-icon" style="background: #fef3c7; color: #f59e0b;"><i class="fas fa-calendar-day"></i></div>
+                            <div class="list-content"><div class="list-title">Parts Corporation</div><div class="list-subtitle">Invoice #INV-446 • Due: 15 Feb</div></div>
+                            <div class="list-value"><div class="list-amount">₹1,80,000</div><span class="list-status status-pending">3 Days</span></div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="section-title">Outstanding Receivables</div>
+                        <div class="list-item" onclick="openReceivableDetail('ABC Corp', 'INV-1235', '1,20,000')">
+                            <div class="list-icon" style="background: #fef3c7; color: #f59e0b;"><i class="fas fa-hand-holding-usd"></i></div>
+                            <div class="list-content"><div class="list-title">ABC Corporation</div><div class="list-subtitle">INV-1235 • Due: 20 Feb</div></div>
+                            <div class="list-value"><div class="list-amount">₹1,20,000</div><span class="list-status status-pending">Send Reminder</span></div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="quick-actions">
+                            <div class="quick-action" onclick="showToast('Generating P&L Report...')"><i class="fas fa-chart-pie"></i><span>P&L Report</span></div>
+                            <div class="quick-action" onclick="showToast('Generating Balance Sheet...')"><i class="fas fa-balance-scale"></i><span>Balance Sheet</span></div>
+                            <div class="quick-action" onclick="showToast('Generating Cash Flow...')"><i class="fas fa-money-bill-wave"></i><span>Cash Flow</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fab" onclick="openModal('payment')"><i class="fas fa-plus"></i></div>
+            </div>
+
+            <!-- Maintenance Screen -->
+            <div class="screen" id="maintenance">
+                <div class="sub-header">
+                    <div class="back-btn" onclick="showScreen('dashboard')"><i class="fas fa-arrow-left"></i></div>
+                    <h2>Machine Maintenance</h2>
+                </div>
+                <div class="tabs" id="maintTabs">
+                    <div class="tab active" onclick="switchTab('maintTabs', 'maintContent', 0)">Schedule</div>
+                    <div class="tab" onclick="switchTab('maintTabs', 'maintContent', 1)">Breakdowns</div>
+                    <div class="tab" onclick="switchTab('maintTabs', 'maintContent', 2)">Spares</div>
+                </div>
+                <div id="maintContent">
+                    <div class="tab-content active">
+                        <div class="calendar-header">
+                            <h3 style="font-size: 16px; font-weight: 600;">February 2024</h3>
+                            <div class="calendar-nav"><button><i class="fas fa-chevron-left"></i></button><button><i class="fas fa-chevron-right"></i></button></div>
+                        </div>
+                        <div class="calendar-days">
+                            <div class="calendar-day header">Su</div><div class="calendar-day header">Mo</div><div class="calendar-day header">Tu</div><div class="calendar-day header">We</div><div class="calendar-day header">Th</div><div class="calendar-day header">Fr</div><div class="calendar-day header">Sa</div>
+                            <div class="calendar-day"></div><div class="calendar-day"></div><div class="calendar-day"></div><div class="calendar-day"></div><div class="calendar-day">1</div><div class="calendar-day">2</div><div class="calendar-day">3</div>
+                            <div class="calendar-day">4</div><div class="calendar-day has-event" onclick="showToast('2 scheduled maintenance')">5</div><div class="calendar-day">6</div><div class="calendar-day">7</div><div class="calendar-day">8</div><div class="calendar-day">9</div><div class="calendar-day has-event" onclick="showToast('1 scheduled maintenance')">10</div>
+                            <div class="calendar-day">11</div><div class="calendar-day today">12</div><div class="calendar-day">13</div><div class="calendar-day">14</div><div class="calendar-day has-event" onclick="showToast('3 scheduled maintenance')">15</div><div class="calendar-day">16</div><div class="calendar-day">17</div>
+                        </div>
+                        <div class="section-title">Today's Schedule</div>
+                        <div class="list-item" onclick="openMaintenanceDetail('CNC Machine #3', 'Oil Change', '10:00 AM')">
+                            <div class="list-icon" style="background: #dbeafe; color: #3b82f6;"><i class="fas fa-cog"></i></div>
+                            <div class="list-content"><div class="list-title">CNC Machine #3</div><div class="list-subtitle">Preventive • Oil Change</div></div>
+                            <div class="list-value"><span class="list-status status-info">10:00 AM</span></div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="section-title">Active Breakdowns</div>
+                        <div class="list-item" onclick="openBreakdownDetail('CNC Machine #5', 'Spindle Error')">
+                            <div class="list-icon" style="background: #fee2e2; color: #ef4444;"><i class="fas fa-exclamation-circle"></i></div>
+                            <div class="list-content"><div class="list-title">CNC Machine #5</div><div class="list-subtitle">Spindle Error • 2 hrs downtime</div></div>
+                            <div class="list-value"><span class="list-status status-urgent">In Progress</span></div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="section-title">Spare Parts Inventory</div>
+                        <div class="list-item" onclick="openSpareDetail('Spindle Bearing', 'SB-001', '12')">
+                            <div class="list-icon" style="background: #ecfdf5; color: #10b981;"><i class="fas fa-cogs"></i></div>
+                            <div class="list-content"><div class="list-title">Spindle Bearing</div><div class="list-subtitle">SKU: SB-001 • For CNC machines</div></div>
+                            <div class="list-value"><div class="list-amount">12 pcs</div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fab" onclick="openModal('breakdown')"><i class="fas fa-plus"></i></div>
+            </div>
+
+            <!-- HR Screen -->
+            <div class="screen" id="hr">
+                <div class="sub-header">
+                    <div class="back-btn" onclick="showScreen('dashboard')"><i class="fas fa-arrow-left"></i></div>
+                    <h2>HR Management</h2>
+                </div>
+                <div class="tabs" id="hrTabs">
+                    <div class="tab active" onclick="switchTab('hrTabs', 'hrContent', 0)">Employees</div>
+                    <div class="tab" onclick="switchTab('hrTabs', 'hrContent', 1)">Attendance</div>
+                    <div class="tab" onclick="switchTab('hrTabs', 'hrContent', 2)">Leaves</div>
+                    <div class="tab" onclick="switchTab('hrTabs', 'hrContent', 3)">Payroll</div>
+                </div>
+                <div id="hrContent">
+                    <div class="tab-content active">
+                        <div class="stats-row">
+                            <div class="stat-card"><div class="stat-value">156</div><div class="stat-label">Total Staff</div></div>
+                            <div class="stat-card"><div class="stat-value" style="color: #10b981;">142</div><div class="stat-label">Present</div></div>
+                            <div class="stat-card"><div class="stat-value" style="color: #f59e0b;">8</div><div class="stat-label">On Leave</div></div>
+                        </div>
+                        <div class="search-bar"><i class="fas fa-search"></i><input type="text" placeholder="Search employees..."></div>
+                        <div class="section-title">Recent Employees</div>
+                        <div class="list-item" onclick="openEmployeeDetail('Amit Verma', 'AV', 'Machine Operator', 'Production', 'EMP-156')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">AV</div>
+                            <div class="list-content"><div class="list-title">Amit Verma</div><div class="list-subtitle">Production • Machine Operator</div></div>
+                            <div class="list-value"><div class="list-subtitle">EMP-156</div></div>
+                        </div>
+                        <div class="list-item" onclick="openEmployeeDetail('Sunita Mehra', 'SM', 'Accountant', 'Accounts', 'EMP-155')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #ec4899, #f43f5e);">SM</div>
+                            <div class="list-content"><div class="list-title">Sunita Mehra</div><div class="list-subtitle">Accounts • Accountant</div></div>
+                            <div class="list-value"><div class="list-subtitle">EMP-155</div></div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="card"><div class="card-title">Today's Attendance</div>
+                            <div style="display: flex; justify-content: space-around; margin-top: 16px;">
+                                <div style="text-align: center;"><div style="font-size: 28px; font-weight: 700; color: #10b981;">142</div><div style="font-size: 12px; color: #64748b;">Present</div></div>
+                                <div style="text-align: center;"><div style="font-size: 28px; font-weight: 700; color: #ef4444;">6</div><div style="font-size: 12px; color: #64748b;">Absent</div></div>
+                                <div style="text-align: center;"><div style="font-size: 28px; font-weight: 700; color: #f59e0b;">8</div><div style="font-size: 12px; color: #64748b;">Leave</div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="section-title">Pending Approvals</div>
+                        <div class="list-item" onclick="openLeaveDetail('Rahul Kumar', 'Casual Leave', '14-15 Feb', 'Pending')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #10b981, #06b6d4);">RK</div>
+                            <div class="list-content"><div class="list-title">Rahul Kumar</div><div class="list-subtitle">Casual Leave • 14-15 Feb</div></div>
+                            <div class="list-value"><span class="list-status status-pending">Approve</span></div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="card"><div class="card-title">Payroll Summary - Feb 2024</div>
+                            <div style="margin-top: 16px;">
+                                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f5f9;"><span style="color: #64748b;">Total Employees</span><span style="font-weight: 600;">156</span></div>
+                                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f5f9;"><span style="color: #64748b;">Gross Salary</span><span style="font-weight: 600;">₹28,50,000</span></div>
+                                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f5f9;"><span style="color: #64748b;">Deductions</span><span style="font-weight: 600; color: #ef4444;">₹3,20,000</span></div>
+                                <div style="display: flex; justify-content: space-between; padding: 8px 0;"><span style="font-weight: 600;">Net Payable</span><span style="font-weight: 700; color: #10b981;">₹25,30,000</span></div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" style="margin: 16px;" onclick="showToast('Processing payroll...')">Process Payroll</button>
+                    </div>
+                </div>
+                <div class="fab" onclick="openModal('employee')"><i class="fas fa-user-plus"></i></div>
+            </div>
+
+            <!-- Incentives Screen -->
+            <div class="screen" id="incentives">
+                <div class="sub-header">
+                    <div class="back-btn" onclick="showScreen('dashboard')"><i class="fas fa-arrow-left"></i></div>
+                    <h2>Production Incentives</h2>
+                </div>
+                <div class="tabs" id="incTabs">
+                    <div class="tab active" onclick="switchTab('incTabs', 'incContent', 0)">Daily</div>
+                    <div class="tab" onclick="switchTab('incTabs', 'incContent', 1)">Weekly</div>
+                    <div class="tab" onclick="switchTab('incTabs', 'incContent', 2)">Monthly</div>
+                </div>
+                <div id="incContent">
+                    <div class="tab-content active">
+                        <div class="card">
+                            <div class="card-title" style="margin-bottom: 16px;">Today's Production</div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                                <div><div style="font-size: 28px; font-weight: 700; color: #10b981;">892</div><div style="font-size: 12px; color: #64748b;">Units Produced</div></div>
+                                <div style="text-align: right;"><div style="font-size: 28px; font-weight: 700; color: #3b82f6;">1000</div><div style="font-size: 12px; color: #64748b;">Target</div></div>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill" style="width: 89%;"></div></div>
+                            <div style="display: flex; justify-content: space-between; font-size: 11px; color: #64748b; margin-top: 4px;"><span>89% Complete</span><span>108 units to go</span></div>
+                        </div>
+                        <div class="section-title">Top Performers Today</div>
+                        <div class="list-item" onclick="openWorkerDetail('Suresh Kumar', 'Line A', '145', '580')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">🥇</div>
+                            <div class="list-content"><div class="list-title">Suresh Kumar</div><div class="list-subtitle">Line A • 145 units</div></div>
+                            <div class="list-value"><div class="list-amount" style="color: #10b981;">+₹580</div><div class="list-subtitle">Incentive</div></div>
+                        </div>
+                        <div class="list-item" onclick="openWorkerDetail('Ramesh Yadav', 'Line B', '138', '520')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #94a3b8, #cbd5e1);">🥈</div>
+                            <div class="list-content"><div class="list-title">Ramesh Yadav</div><div class="list-subtitle">Line B • 138 units</div></div>
+                            <div class="list-value"><div class="list-amount" style="color: #10b981;">+₹520</div><div class="list-subtitle">Incentive</div></div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="card"><div class="card-title">This Week</div>
+                            <div style="display: flex; justify-content: space-around; margin-top: 16px;">
+                                <div style="text-align: center;"><div style="font-size: 24px; font-weight: 700; color: #10b981;">4,580</div><div style="font-size: 12px; color: #64748b;">Units</div></div>
+                                <div style="text-align: center;"><div style="font-size: 24px; font-weight: 700; color: #3b82f6;">5,000</div><div style="font-size: 12px; color: #64748b;">Target</div></div>
+                                <div style="text-align: center;"><div style="font-size: 24px; font-weight: 700; color: #f59e0b;">₹18.5K</div><div style="font-size: 12px; color: #64748b;">Incentives</div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="card"><div class="card-title">February 2024</div>
+                            <div style="display: flex; justify-content: space-around; margin-top: 16px;">
+                                <div style="text-align: center;"><div style="font-size: 24px; font-weight: 700; color: #10b981;">18,420</div><div style="font-size: 12px; color: #64748b;">Units</div></div>
+                                <div style="text-align: center;"><div style="font-size: 24px; font-weight: 700; color: #3b82f6;">20,000</div><div style="font-size: 12px; color: #64748b;">Target</div></div>
+                                <div style="text-align: center;"><div style="font-size: 24px; font-weight: 700; color: #f59e0b;">₹72K</div><div style="font-size: 12px; color: #64748b;">Incentives</div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visitor Screen -->
+            <div class="screen" id="visitor">
+                <div class="sub-header">
+                    <div class="back-btn" onclick="showScreen('dashboard')"><i class="fas fa-arrow-left"></i></div>
+                    <h2>Visitor Management</h2>
+                </div>
+                <div class="tabs" id="visTabs">
+                    <div class="tab active" onclick="switchTab('visTabs', 'visContent', 0)">Today</div>
+                    <div class="tab" onclick="switchTab('visTabs', 'visContent', 1)">Pre-Register</div>
+                    <div class="tab" onclick="switchTab('visTabs', 'visContent', 2)">History</div>
+                </div>
+                <div id="visContent">
+                    <div class="tab-content active">
+                        <div class="stats-row">
+                            <div class="stat-card"><div class="stat-value">12</div><div class="stat-label">Total Today</div></div>
+                            <div class="stat-card"><div class="stat-value" style="color: #10b981;">8</div><div class="stat-label">Checked In</div></div>
+                            <div class="stat-card"><div class="stat-value" style="color: #64748b;">4</div><div class="stat-label">Expected</div></div>
+                        </div>
+                        <div class="visitor-badge" onclick="openVisitorDetail('Rajesh Gupta', 'ABC Technologies', 'Amit Shah', '10:30 AM', 'V-045')">
+                            <div class="badge-photo"><i class="fas fa-user"></i></div>
+                            <div class="badge-name">Rajesh Gupta</div>
+                            <div class="badge-company">ABC Technologies</div>
+                            <div class="badge-qr"><i class="fas fa-qrcode" style="font-size: 60px; color: #94a3b8;"></i></div>
+                            <div class="badge-info">
+                                <div class="badge-info-item"><div class="badge-info-label">Check In</div><div class="badge-info-value">10:30 AM</div></div>
+                                <div class="badge-info-item"><div class="badge-info-label">Host</div><div class="badge-info-value">Amit Shah</div></div>
+                                <div class="badge-info-item"><div class="badge-info-label">Badge #</div><div class="badge-info-value">V-045</div></div>
+                            </div>
+                        </div>
+                        <div class="section-title">Current Visitors</div>
+                        <div class="list-item" onclick="openVisitorDetail('Sunil Kapoor', 'Vendor Visit', 'Ravi Kumar', '09:15 AM', 'V-044')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">SK</div>
+                            <div class="list-content"><div class="list-title">Sunil Kapoor</div><div class="list-subtitle">Vendor • Host: Ravi Kumar</div></div>
+                            <div class="list-value"><span class="list-status status-approved">In</span></div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="section-title">Pre-Register New Visitor</div>
+                        <div class="card">
+                            <div class="form-group"><label class="form-label">Visitor Name</label><input type="text" class="form-input" placeholder="Enter name"></div>
+                            <div class="form-group"><label class="form-label">Company</label><input type="text" class="form-input" placeholder="Enter company"></div>
+                            <div class="form-group"><label class="form-label">Host Employee</label><select class="form-select"><option>Select host</option><option>Amit Shah</option><option>Ravi Kumar</option></select></div>
+                            <div class="form-group"><label class="form-label">Visit Date & Time</label><input type="datetime-local" class="form-input"></div>
+                            <button class="btn btn-primary" onclick="showToast('Visitor pre-registered successfully!')">Pre-Register Visitor</button>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="section-title">Recent Visitors</div>
+                        <div class="list-item">
+                            <div class="avatar" style="background: linear-gradient(135deg, #10b981, #06b6d4);">PM</div>
+                            <div class="list-content"><div class="list-title">Pradeep Mehta</div><div class="list-subtitle">Client • 11 Feb 2024</div></div>
+                            <div class="list-value"><span class="list-status status-info">Completed</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fab" onclick="openModal('visitor')"><i class="fas fa-user-plus"></i></div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div class="bottom-nav">
+                <div class="nav-item active" id="nav-home" onclick="showScreen('dashboard')"><i class="fas fa-home"></i><span>Home</span></div>
+                <div class="nav-item" id="nav-sales" onclick="showScreen('sales')"><i class="fas fa-chart-line"></i><span>Sales</span></div>
+                <div class="nav-item" id="nav-inventory" onclick="showScreen('inventory')"><i class="fas fa-boxes"></i><span>Inventory</span></div>
+                <div class="nav-item" id="nav-hr" onclick="showScreen('hr')"><i class="fas fa-users"></i><span>HR</span></div>
+                <div class="nav-item" id="nav-more" onclick="toggleMenu()"><i class="fas fa-th"></i><span>More</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Screen Navigation
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            const navMap = { 'dashboard': 'nav-home', 'sales': 'nav-sales', 'inventory': 'nav-inventory', 'hr': 'nav-hr' };
+            if (navMap[screenId]) document.getElementById(navMap[screenId]).classList.add('active');
+        }
+
+        // Menu Toggle
+        function toggleMenu() {
+            document.getElementById('menuOverlay').classList.toggle('active');
+            document.getElementById('menuDrawer').classList.toggle('active');
+        }
+
+        // Tab Switching
+        function switchTab(tabsId, contentId, index) {
+            const tabs = document.getElementById(tabsId).querySelectorAll('.tab');
+            const contents = document.getElementById(contentId).querySelectorAll('.tab-content');
+            tabs.forEach((t, i) => { t.classList.toggle('active', i === index); });
+            contents.forEach((c, i) => { c.classList.toggle('active', i === index); });
+        }
+
+        // Role Selection
+        function selectRole(el) {
+            document.querySelectorAll('.role-chip').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            showToast('Switched to ' + el.textContent + ' view');
+        }
+
+        // Toast Notification
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        // Modal Functions
+        function openModal(type) {
+            const modal = document.getElementById('modalContent');
+            const overlay = document.getElementById('modalOverlay');
+            let content = '';
+
+            const modals = {
+                'invoice': { title: 'Create Invoice', fields: [
+                    { label: 'Customer', type: 'select', options: ['ABC Corporation', 'Tech Industries', 'Global Mfg'] },
+                    { label: 'Invoice Date', type: 'date' },
+                    { label: 'Due Date', type: 'date' },
+                    { label: 'Amount (₹)', type: 'number', placeholder: 'Enter amount' },
+                    { label: 'Description', type: 'textarea', placeholder: 'Invoice description' }
+                ]},
+                'quote': { title: 'New Quote', fields: [
+                    { label: 'Customer', type: 'select', options: ['ABC Corporation', 'Tech Industries', 'Global Mfg'] },
+                    { label: 'Valid Until', type: 'date' },
+                    { label: 'Amount (₹)', type: 'number', placeholder: 'Enter amount' },
+                    { label: 'Notes', type: 'textarea', placeholder: 'Quote notes' }
+                ]},
+                'customer': { title: 'Add Customer', fields: [
+                    { label: 'Company Name', type: 'text', placeholder: 'Enter company name' },
+                    { label: 'Contact Person', type: 'text', placeholder: 'Enter contact name' },
+                    { label: 'Phone', type: 'tel', placeholder: 'Enter phone number' },
+                    { label: 'Email', type: 'email', placeholder: 'Enter email' },
+                    { label: 'Address', type: 'textarea', placeholder: 'Enter address' }
+                ]},
+                'po': { title: 'Create Purchase Order', fields: [
+                    { label: 'Vendor', type: 'select', options: ['Steel Suppliers Ltd', 'Parts Corporation', 'Logistics Inc'] },
+                    { label: 'Delivery Date', type: 'date' },
+                    { label: 'Amount (₹)', type: 'number', placeholder: 'Enter amount' },
+                    { label: 'Items', type: 'textarea', placeholder: 'List items...' }
+                ]},
+                'asn': { title: 'Create ASN', fields: [
+                    { label: 'PO Number', type: 'select', options: ['PO-2024-892', 'PO-2024-891', 'PO-2024-890'] },
+                    { label: 'Vehicle Number', type: 'text', placeholder: 'Enter vehicle number' },
+                    { label: 'Driver Name', type: 'text', placeholder: 'Enter driver name' },
+                    { label: 'Expected Arrival', type: 'datetime-local' }
+                ]},
+                'grn': { title: 'Create GRN', fields: [
+                    { label: 'ASN Number', type: 'select', options: ['ASN-2024-156', 'ASN-2024-155'] },
+                    { label: 'Received Qty', type: 'number', placeholder: 'Enter quantity' },
+                    { label: 'Condition', type: 'select', options: ['Good', 'Damaged', 'Partial'] },
+                    { label: 'Remarks', type: 'textarea', placeholder: 'Enter remarks' }
+                ]},
+                'materialRequest': { title: 'Material Request', fields: [
+                    { label: 'Department', type: 'select', options: ['Production Line A', 'Production Line B', 'Maintenance', 'Quality'] },
+                    { label: 'Item', type: 'text', placeholder: 'Enter item name' },
+                    { label: 'Quantity', type: 'number', placeholder: 'Enter quantity' },
+                    { label: 'Required Date', type: 'date' },
+                    { label: 'Reason', type: 'textarea', placeholder: 'Enter reason' }
+                ]},
+                'breakdown': { title: 'Report Breakdown', fields: [
+                    { label: 'Machine', type: 'select', options: ['CNC Machine #1', 'CNC Machine #2', 'CNC Machine #3', 'Lathe #1', 'Lathe #2'] },
+                    { label: 'Issue Type', type: 'select', options: ['Electrical', 'Mechanical', 'Hydraulic', 'Software', 'Other'] },
+                    { label: 'Description', type: 'textarea', placeholder: 'Describe the issue' },
+                    { label: 'Priority', type: 'select', options: ['Critical', 'High', 'Medium', 'Low'] }
+                ]},
+                'employee': { title: 'Add Employee', fields: [
+                    { label: 'Full Name', type: 'text', placeholder: 'Enter full name' },
+                    { label: 'Department', type: 'select', options: ['Production', 'Maintenance', 'Quality', 'Accounts', 'HR', 'Sales'] },
+                    { label: 'Designation', type: 'text', placeholder: 'Enter designation' },
+                    { label: 'Phone', type: 'tel', placeholder: 'Enter phone number' },
+                    { label: 'Email', type: 'email', placeholder: 'Enter email' },
+                    { label: 'Joining Date', type: 'date' }
+                ]},
+                'visitor': { title: 'Check-in Visitor', fields: [
+                    { label: 'Visitor Name', type: 'text', placeholder: 'Enter name' },
+                    { label: 'Company', type: 'text', placeholder: 'Enter company' },
+                    { label: 'Phone', type: 'tel', placeholder: 'Enter phone' },
+                    { label: 'Host Employee', type: 'select', options: ['Amit Shah', 'Ravi Kumar', 'Priya Sharma'] },
+                    { label: 'Purpose', type: 'select', options: ['Meeting', 'Delivery', 'Interview', 'Vendor Visit', 'Other'] }
+                ]},
+                'payment': { title: 'Record Payment', fields: [
+                    { label: 'Vendor', type: 'select', options: ['Steel Suppliers Ltd', 'Parts Corporation'] },
+                    { label: 'Amount (₹)', type: 'number', placeholder: 'Enter amount' },
+                    { label: 'Payment Mode', type: 'select', options: ['Bank Transfer', 'Cheque', 'Cash', 'UPI'] },
+                    { label: 'Reference', type: 'text', placeholder: 'Transaction reference' }
+                ]}
+            };
+
+            const m = modals[type];
+            if (!m) return;
+
+            content = `<div class="modal-header"><div class="modal-title">${m.title}</div><div class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></div></div><div class="modal-body">`;
+            m.fields.forEach(f => {
+                content += `<div class="form-group"><label class="form-label">${f.label}</label>`;
+                if (f.type === 'select') {
+                    content += `<select class="form-select"><option>Select ${f.label.toLowerCase()}</option>${f.options.map(o => `<option>${o}</option>`).join('')}</select>`;
+                } else if (f.type === 'textarea') {
+                    content += `<textarea class="form-input" rows="3" placeholder="${f.placeholder || ''}"></textarea>`;
+                } else {
+                    content += `<input type="${f.type}" class="form-input" placeholder="${f.placeholder || ''}">`;
+                }
+                content += '</div>';
+            });
+            content += `<button class="btn btn-primary" onclick="submitForm('${type}')">${m.title}</button></div>`;
+
+            modal.innerHTML = content;
+            overlay.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        function submitForm(type) {
+            closeModal();
+            const messages = {
+                'invoice': 'Invoice created successfully!',
+                'quote': 'Quote created successfully!',
+                'customer': 'Customer added successfully!',
+                'po': 'Purchase Order created!',
+                'asn': 'ASN created successfully!',
+                'grn': 'GRN recorded successfully!',
+                'materialRequest': 'Material request submitted!',
+                'breakdown': 'Breakdown reported!',
+                'employee': 'Employee added successfully!',
+                'visitor': 'Visitor checked in!',
+                'payment': 'Payment recorded!'
+            };
+            showToast(messages[type] || 'Saved successfully!');
+        }
+
+        // Detail View Functions
+        function openDetailModal(title, content) {
+            const modal = document.getElementById('modalContent');
+            modal.innerHTML = `<div class="modal-header"><div class="modal-title">${title}</div><div class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></div></div><div class="modal-body">${content}</div>`;
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function openInvoiceDetail(id, customer, amount, status) {
+            const statusClass = status === 'Paid' ? 'status-approved' : status === 'Overdue' ? 'status-urgent' : 'status-pending';
+            openDetailModal('Invoice Details', `
+                <div style="text-align: center; padding: 20px 0;">
+                    <div style="font-size: 32px; font-weight: 700; color: #1e293b;">₹${amount}</div>
+                    <span class="list-status ${statusClass}">${status}</span>
+                </div>
+                <div class="detail-row"><span class="detail-label">Invoice #</span><span class="detail-value">${id}</span></div>
+                <div class="detail-row"><span class="detail-label">Customer</span><span class="detail-value">${customer}</span></div>
+                <div class="detail-row"><span class="detail-label">Date</span><span class="detail-value">10 Feb 2024</span></div>
+                <div class="detail-row"><span class="detail-label">Due Date</span><span class="detail-value">20 Feb 2024</span></div>
+                <div style="margin-top: 20px; display: flex; gap: 12px;">
+                    <button class="btn btn-secondary" style="flex: 1;" onclick="showToast('Invoice downloaded!')"><i class="fas fa-download"></i> Download</button>
+                    <button class="btn btn-primary" style="flex: 1;" onclick="showToast('Reminder sent!')"><i class="fas fa-paper-plane"></i> Send</button>
+                </div>
+            `);
+        }
+
+        function openCustomerDetail(name, initials, product, amount, stage) {
+            openDetailModal('Customer Details', `
+                <div style="text-align: center; padding: 20px 0;">
+                    <div class="avatar" style="background: linear-gradient(135deg, #10b981, #06b6d4); width: 60px; height: 60px; font-size: 24px; margin: 0 auto;">${initials}</div>
+                    <div style="font-size: 18px; font-weight: 700; margin-top: 12px;">${name}</div>
+                    <div style="color: #64748b;">${product}</div>
+                </div>
+                <div class="detail-row"><span class="detail-label">Deal Value</span><span class="detail-value">₹${amount}</span></div>
+                <div class="detail-row"><span class="detail-label">Stage</span><span class="detail-value">${stage}</span></div>
+                <div class="detail-row"><span class="detail-label">Contact</span><span class="detail-value">+91 98765 43210</span></div>
+                <div class="detail-row"><span class="detail-label">Email</span><span class="detail-value">contact@${name.toLowerCase().replace(' ', '')}.com</span></div>
+                <div style="margin-top: 20px; display: flex; gap: 12px;">
+                    <button class="btn btn-secondary" style="flex: 1;" onclick="showToast('Calling...')"><i class="fas fa-phone"></i> Call</button>
+                    <button class="btn btn-primary" style="flex: 1;" onclick="openModal('quote')"><i class="fas fa-file-alt"></i> Quote</button>
+                </div>
+            `);
+        }
+
+        function openVendorDetail(name, initials, ontime, amount) {
+            openDetailModal('Vendor Details', `
+                <div style="text-align: center; padding: 20px 0;">
+                    <div class="avatar" style="background: linear-gradient(135deg, #10b981, #06b6d4); width: 60px; height: 60px; font-size: 24px; margin: 0 auto;">${initials}</div>
+                    <div style="font-size: 18px; font-weight: 700; margin-top: 12px;">${name}</div>
+                    <div style="color: #f59e0b;">★★★★★</div>
+                </div>
+                <div class="detail-row"><span class="detail-label">On-time Delivery</span><span class="detail-value">${ontime}</span></div>
+                <div class="detail-row"><span class="detail-label">This Month</span><span class="detail-value">₹${amount}</span></div>
+                <div class="detail-row"><span class="detail-label">Total Orders</span><span class="detail-value">156</span></div>
+                <div class="detail-row"><span class="detail-label">Contact</span><span class="detail-value">+91 98765 43210</span></div>
+                <div style="margin-top: 20px;">
+                    <button class="btn btn-primary" onclick="openModal('po')"><i class="fas fa-plus"></i> Create PO</button>
+                </div>
+            `);
+        }
+
+        function openEmployeeDetail(name, initials, designation, dept, empId) {
+            openDetailModal('Employee Details', `
+                <div style="text-align: center; padding: 20px 0;">
+                    <div class="avatar" style="background: linear-gradient(135deg, #10b981, #06b6d4); width: 60px; height: 60px; font-size: 24px; margin: 0 auto;">${initials}</div>
+                    <div style="font-size: 18px; font-weight: 700; margin-top: 12px;">${name}</div>
+                    <div style="color: #64748b;">${empId}</div>
+                </div>
+                <div class="detail-row"><span class="detail-label">Department</span><span class="detail-value">${dept}</span></div>
+                <div class="detail-row"><span class="detail-label">Designation</span><span class="detail-value">${designation}</span></div>
+                <div class="detail-row"><span class="detail-label">Phone</span><span class="detail-value">+91 98765 43210</span></div>
+                <div class="detail-row"><span class="detail-label">Email</span><span class="detail-value">${name.toLowerCase().replace(' ', '.')}@company.com</span></div>
+                <div class="detail-row"><span class="detail-label">Joining Date</span><span class="detail-value">15 Jan 2024</span></div>
+                <div style="margin-top: 20px; display: flex; gap: 12px;">
+                    <button class="btn btn-secondary" style="flex: 1;" onclick="showToast('Calling...')"><i class="fas fa-phone"></i> Call</button>
+                    <button class="btn btn-primary" style="flex: 1;" onclick="showToast('Email opened')"><i class="fas fa-envelope"></i> Email</button>
+                </div>
+            `);
+        }
+
+        function openStockDetail(name, sku, qty, reorder, warehouse) {
+            const pct = (parseInt(qty) / parseInt(reorder) * 100).toFixed(0);
+            openDetailModal('Stock Details', `
+                <div style="text-align: center; padding: 20px 0;">
+                    <div style="font-size: 48px; font-weight: 700; color: ${pct < 30 ? '#ef4444' : '#10b981'};">${qty}</div>
+                    <div style="color: #64748b;">units in stock</div>
+                </div>
+                <div class="detail-row"><span class="detail-label">Item</span><span class="detail-value">${name}</span></div>
+                <div class="detail-row"><span class="detail-label">SKU</span><span class="detail-value">${sku}</span></div>
+                <div class="detail-row"><span class="detail-label">Warehouse</span><span class="detail-value">${warehouse}</span></div>
+                <div class="detail-row"><span class="detail-label">Reorder Level</span><span class="detail-value">${reorder}</span></div>
+                <div style="margin-top: 20px;">
+                    <button class="btn btn-primary" onclick="openModal('po'); closeModal();"><i class="fas fa-shopping-cart"></i> Create Purchase Order</button>
+                </div>
+            `);
+        }
+
+        function openPODetail(id, vendor, status) {
+            openDetailModal('Purchase Order', `
+                <div style="text-align: center; padding: 20px 0;">
+                    <div style="font-size: 24px; font-weight: 700;">${id}</div>
+                    <span class="list-status status-info">${status}</span>
+                </div>
+                <div class="detail-row"><span class="detail-label">Vendor</span><span class="detail-value">${vendor}</span></div>
+                <div class="detail-row"><span class="detail-label">Items</span><span class="detail-value">12</span></div>
+                <div class="detail-row"><span class="detail-label">Amount</span><span class="detail-value">₹3,50,000</span></div>
+                <div class="detail-row"><span class="detail-label">Order Date</span><span class="detail-value">08 Feb 2024</span></div>
+                <div class="detail-row"><span class="detail-label">Expected</span><span class="detail-value">15 Feb 2024</span></div>
+                <div style="margin-top: 20px; display: flex; gap: 12px;">
+                    <button class="btn btn-secondary" style="flex: 1;" onclick="showToast('PO downloaded!')"><i class="fas fa-download"></i> Download</button>
+                    <button class="btn btn-primary" style="flex: 1;" onclick="openModal('grn'); closeModal();"><i class="fas fa-clipboard-check"></i> Create GRN</button>
+                </div>
+            `);
+        }
+
+        function openBreakdownDetail(machine, issue) {
+            openDetailModal('Breakdown Details', `
+                <div style="text-align: center; padding: 20px 0;">
+                    <div style="width: 60px; height: 60px; background: #fee2e2; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto;"><i class="fas fa-exclamation-triangle" style="font-size: 24px; color: #ef4444;"></i></div>
+                    <div style="font-size: 18px; font-weight: 700; margin-top: 12px;">${machine}</div>
+                    <div style="color: #ef4444;">${issue}</div>
+                </div>
+                <div class="detail-row"><span class="detail-label">Reported</span><span class="detail-value">2 hours ago</span></div>
+                <div class="detail-row"><span class="detail-label">Downtime</span><span class="detail-value">2 hrs</span></div>
+                <div class="detail-row"><span class="detail-label">Assigned To</span><span class="detail-value">Maintenance Team A</span></div>
+                <div class="detail-row"><span class="detail-label">Priority</span><span class="detail-value" style="color: #ef4444;">Critical</span></div>
+                <div style="margin-top: 20px;">
+                    <button class="btn btn-primary" onclick="showToast('Marked as resolved!'); closeModal();"><i class="fas fa-check"></i> Mark Resolved</button>
+                </div>
+            `);
+        }
+
+        function openVisitorDetail(name, company, host, time, badge) {
+            openDetailModal('Visitor Badge', `
+                <div class="visitor-badge" style="margin: 0; box-shadow: none;">
+                    <div class="badge-photo"><i class="fas fa-user"></i></div>
+                    <div class="badge-name">${name}</div>
+                    <div class="badge-company">${company}</div>
+                    <div class="badge-qr"><i class="fas fa-qrcode" style="font-size: 60px; color: #94a3b8;"></i></div>
+                    <div class="badge-info">
+                        <div class="badge-info-item"><div class="badge-info-label">Check In</div><div class="badge-info-value">${time}</div></div>
+                        <div class="badge-info-item"><div class="badge-info-label">Host</div><div class="badge-info-value">${host}</div></div>
+                        <div class="badge-info-item"><div class="badge-info-label">Badge #</div><div class="badge-info-value">${badge}</div></div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 12px; margin-top: 16px;">
+                    <button class="btn btn-secondary" style="flex: 1;" onclick="showToast('Badge printed!')"><i class="fas fa-print"></i> Print</button>
+                    <button class="btn btn-primary" style="flex: 1;" onclick="showToast('Visitor checked out!'); closeModal();"><i class="fas fa-sign-out-alt"></i> Check Out</button>
+                </div>
+            `);
+        }
+
+        function openWorkerDetail(name, line, units, incentive) {
+            openDetailModal('Worker Performance', `
+                <div style="text-align: center; padding: 20px 0;">
+                    <div style="font-size: 48px;">🏆</div>
+                    <div style="font-size: 18px; font-weight: 700; margin-top: 8px;">${name}</div>
+                    <div style="color: #64748b;">${line}</div>
+                </div>
+                <div class="detail-row"><span class="detail-label">Units Today</span><span class="detail-value">${units}</span></div>
+                <div class="detail-row"><span class="detail-label">Target</span><span class="detail-value">100</span></div>
+                <div class="detail-row"><span class="detail-label">Achievement</span><span class="detail-value" style="color: #10b981;">${(parseInt(units)/100*100).toFixed(0)}%</span></div>
+                <div class="detail-row"><span class="detail-label">Today's Incentive</span><span class="detail-value" style="color: #10b981; font-weight: 700;">₹${incentive}</span></div>
+                <div class="detail-row"><span class="detail-label">Month Total</span><span class="detail-value">₹8,450</span></div>
+            `);
+        }
+
+        function openLeaveDetail(name, type, dates, status) {
+            openDetailModal('Leave Request', `
+                <div style="text-align: center; padding: 20px 0;">
+                    <div class="avatar" style="background: linear-gradient(135deg, #10b981, #06b6d4); width: 60px; height: 60px; font-size: 24px; margin: 0 auto;">${name.split(' ').map(n=>n[0]).join('')}</div>
+                    <div style="font-size: 18px; font-weight: 700; margin-top: 12px;">${name}</div>
+                </div>
+                <div class="detail-row"><span class="detail-label">Leave Type</span><span class="detail-value">${type}</span></div>
+                <div class="detail-row"><span class="detail-label">Dates</span><span class="detail-value">${dates}</span></div>
+                <div class="detail-row"><span class="detail-label">Days</span><span class="detail-value">2</span></div>
+                <div class="detail-row"><span class="detail-label">Reason</span><span class="detail-value">Personal work</span></div>
+                <div style="margin-top: 20px; display: flex; gap: 12px;">
+                    <button class="btn btn-secondary" style="flex: 1;" onclick="showToast('Leave rejected'); closeModal();"><i class="fas fa-times"></i> Reject</button>
+                    <button class="btn btn-primary" style="flex: 1;" onclick="showToast('Leave approved!'); closeModal();"><i class="fas fa-check"></i> Approve</button>
+                </div>
+            `);
+        }
+
+        function openMRDetail(id, dept, items, status) {
+            openDetailModal('Material Request', `
+                <div style="text-align: center; padding: 20px 0;">
+                    <div style="font-size: 24px; font-weight: 700;">${id}</div>
+                    <span class="list-status ${status === 'Pending' ? 'status-pending' : 'status-approved'}">${status}</span>
+                </div>
+                <div class="detail-row"><span class="detail-label">Department</span><span class="detail-value">${dept}</span></div>
+                <div class="detail-row"><span class="detail-label">Items</span><span class="detail-value">${items}</span></div>
+                <div class="detail-row"><span class="detail-label">Requested By</span><span class="detail-value">Rahul Kumar</span></div>
+                <div class="detail-row"><span class="detail-label">Date</span><span class="detail-value">12 Feb 2024</span></div>
+                ${status === 'Pending' ? `<div style="margin-top: 20px; display: flex; gap: 12px;">
+                    <button class="btn btn-secondary" style="flex: 1;" onclick="showToast('Request rejected'); closeModal();"><i class="fas fa-times"></i> Reject</button>
+                    <button class="btn btn-primary" style="flex: 1;" onclick="showToast('Request approved!'); closeModal();"><i class="fas fa-check"></i> Approve</button>
+                </div>` : ''}
+            `);
+        }
+
+        function openMaintenanceDetail(machine, task, time) {
+            openDetailModal('Scheduled Maintenance', `
+                <div style="text-align: center; padding: 20px 0;">
+                    <div style="width: 60px; height: 60px; background: #dbeafe; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto;"><i class="fas fa-cog" style="font-size: 24px; color: #3b82f6;"></i></div>
+                    <div style="font-size: 18px; font-weight: 700; margin-top: 12px;">${machine}</div>
+                    <div style="color: #64748b;">${task}</div>
+                </div>
+                <div class="detail-row"><span class="detail-label">Scheduled</span><span class="detail-value">${time}</span></div>
+                <div class="detail-row"><span class="detail-label">Type</span><span class="detail-value">Preventive</span></div>
+                <div class="detail-row"><span class="detail-label">Assigned To</span><span class="detail-value">Tech Team A</span></div>
+                <div class="detail-row"><span class="detail-label">Est. Duration</span><span class="detail-value">1 hour</span></div>
+                <div style="margin-top: 20px;">
+                    <button class="btn btn-primary" onclick="showToast('Maintenance started!'); closeModal();"><i class="fas fa-play"></i> Start Maintenance</button>
+                </div>
+            `);
+        }
+
+        function openASNDetail(id, vendor, status) {
+            openDetailModal('ASN Verification', `
+                <div style="text-align: center; padding: 20px 0;">
+                    <div style="font-size: 24px; font-weight: 700;">${id}</div>
+                    <span class="list-status status-pending">${status}</span>
+                </div>
+                <div class="detail-row"><span class="detail-label">Vendor</span><span class="detail-value">${vendor}</span></div>
+                <div class="detail-row"><span class="detail-label">Vehicle</span><span class="detail-value">MH12AB1234</span></div>
+                <div class="detail-row"><span class="detail-label">Driver</span><span class="detail-value">Ramesh</span></div>
+                <div class="detail-row"><span class="detail-label">Items</span><span class="detail-value">8</span></div>
+                <div style="margin-top: 20px;">
+                    <button class="btn btn-primary" onclick="showToast('ASN Verified! Proceed to GRN.'); closeModal();"><i class="fas fa-check"></i> Verify & Allow Entry</button>
+                </div>
+            `);
+        }
+
+        function openGRNDetail(id, vendor, status) { openDetailModal('GRN Details', `<div class="detail-row"><span class="detail-label">GRN #</span><span class="detail-value">${id}</span></div><div class="detail-row"><span class="detail-label">Vendor</span><span class="detail-value">${vendor}</span></div><div class="detail-row"><span class="detail-label">Status</span><span class="detail-value">${status}</span></div>`); }
+        function openPaymentDetail(vendor, inv, amt, status) { openDetailModal('Payment Details', `<div class="detail-row"><span class="detail-label">Vendor</span><span class="detail-value">${vendor}</span></div><div class="detail-row"><span class="detail-label">Invoice</span><span class="detail-value">#${inv}</span></div><div class="detail-row"><span class="detail-label">Amount</span><span class="detail-value">₹${amt}</span></div><div class="detail-row"><span class="detail-label">Status</span><span class="detail-value">${status}</span></div><button class="btn btn-primary" style="margin-top: 20px;" onclick="showToast('Payment initiated!'); closeModal();"><i class="fas fa-credit-card"></i> Pay Now</button>`); }
+        function openReceivableDetail(customer, inv, amt) { openDetailModal('Receivable Details', `<div class="detail-row"><span class="detail-label">Customer</span><span class="detail-value">${customer}</span></div><div class="detail-row"><span class="detail-label">Invoice</span><span class="detail-value">${inv}</span></div><div class="detail-row"><span class="detail-label">Amount</span><span class="detail-value">₹${amt}</span></div><button class="btn btn-primary" style="margin-top: 20px;" onclick="showToast('Reminder sent!'); closeModal();"><i class="fas fa-paper-plane"></i> Send Reminder</button>`); }
+        function openLedgerDetail(customer, total, outstanding) { openDetailModal('Customer Ledger', `<div class="detail-row"><span class="detail-label">Customer</span><span class="detail-value">${customer}</span></div><div class="detail-row"><span class="detail-label">Total Business</span><span class="detail-value">₹${total}</span></div><div class="detail-row"><span class="detail-label">Outstanding</span><span class="detail-value" style="color: #ef4444;">₹${outstanding}</span></div>`); }
+        function openIssueDetail(id, dept, items) { openDetailModal('Material Issue', `<div class="detail-row"><span class="detail-label">Issue #</span><span class="detail-value">${id}</span></div><div class="detail-row"><span class="detail-label">Department</span><span class="detail-value">${dept}</span></div><div class="detail-row"><span class="detail-label">Items</span><span class="detail-value">${items}</span></div>`); }
+        function openSpareDetail(name, sku, qty) { openDetailModal('Spare Part', `<div class="detail-row"><span class="detail-label">Name</span><span class="detail-value">${name}</span></div><div class="detail-row"><span class="detail-label">SKU</span><span class="detail-value">${sku}</span></div><div class="detail-row"><span class="detail-label">Stock</span><span class="detail-value">${qty} pcs</span></div>`); }
+
+        // Close modal on overlay click
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+    </script>
+</body>
+</html>
