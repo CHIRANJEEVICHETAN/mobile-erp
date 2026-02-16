@@ -86,27 +86,30 @@ A comprehensive **Mobile Enterprise Resource Planning (ERP)** system designed fo
 ```
 mobile-erp/
 ├── index.html              # Main application entry point
-├── vercel.json             # Vercel deployment configuration
-├── deploy.sh               # Deployment script
+├── vercel.json             # Vercel deployment configuration (SPA routing + security)
+├── package.json            # Node.js configuration and scripts
+├── deploy.sh               # Automated deployment script
+├── .vercelignore          # Deployment optimization (exclude dev files)
+├── .gitignore             # Git ignore rules
 ├── css/
-│   └── styles.css          # Complete styling system
+│   └── styles.css          # Complete styling system (1700+ lines)
 ├── js/
 │   ├── app.js             # Core navigation and UI logic
 │   ├── screenLoader.js    # Dynamic screen loading system
-│   ├── modals.js          # Modal forms and interactions
+│   ├── modals.js          # Modal forms and interactions (25+ forms)
 │   └── details.js         # Detail view handlers
-├── screens/               # Modular screen components
-│   ├── dashboard.html     # Main dashboard
-│   ├── sales.html         # Sales & invoicing
-│   ├── inventory.html     # Inventory management
-│   ├── vendor.html        # Vendor operations
-│   ├── finance.html       # Financial management
+├── screens/               # Modular screen components (9 screens)
+│   ├── dashboard.html     # Main dashboard with KPIs
+│   ├── sales.html         # Sales pipeline & invoicing
+│   ├── inventory.html     # Stock management & receipts
+│   ├── vendor.html        # PO management & ASN tracking
+│   ├── finance.html       # Payables & receivables
 │   ├── maintenance.html   # Equipment maintenance
-│   ├── hr.html           # Human resources
-│   ├── production.html   # Production tracking
-│   ├── security.html     # Security & access
-│   └── visitor.html      # Visitor management
-└── README.md             # This file
+│   ├── hr.html           # Employee management
+│   ├── production.html   # OEE dashboard & tracking
+│   ├── security.html     # Attendance & visitor control
+│   └── visitor.html      # Visitor management system
+└── README.md             # This documentation
 ```
 
 ## 🚀 **Quick Deploy to Vercel**
@@ -206,6 +209,28 @@ See [`change-checklist.md`](change-checklist.md) for comprehensive testing scena
 3. **Modules**: Access specific business functions
 4. **Forms**: Create invoices, POs, maintenance requests, etc.
 5. **Reports**: View analytics and performance data
+
+## 🐛 **Troubleshooting**
+
+### **Vercel Configuration Error**
+```
+If `rewrites`, `redirects`, `headers`, `cleanUrls` or `trailingSlash` are used, then `routes` cannot be present.
+```
+
+**✅ Solution Applied:**
+- Changed `routes` to `rewrites` in `vercel.json`
+- Enables SPA routing for dynamic screen loading
+- Security headers properly configured
+
+### **Common Issues**
+- **404 on refresh**: Fixed with `rewrites` configuration
+- **Slow loading**: Optimized with `.vercelignore` and CDN
+- **CORS issues**: Static site - no backend required
+
+### **Need Help?**
+- **Vercel Docs**: [vercel.com/docs](https://vercel.com/docs)
+- **Status Check**: `vercel --debug`
+- **Logs**: Check Vercel dashboard
 
 ## 🤝 **Contributing**
 
