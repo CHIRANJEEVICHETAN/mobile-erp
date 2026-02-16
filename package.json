@@ -1,0 +1,33 @@
+{
+  "name": "mobile-erp",
+  "version": "1.0.0",
+  "description": "Mobile Enterprise Resource Planning system for manufacturing businesses",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx http-server -p 3000",
+    "build": "echo 'Static site - no build required'",
+    "deploy": "vercel --prod",
+    "preview": "vercel"
+  },
+  "keywords": [
+    "erp",
+    "manufacturing",
+    "mobile",
+    "business-management",
+    "inventory",
+    "finance",
+    "hr",
+    "production"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "homepage": "https://mobile-erp.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/mobile-erp.git"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "vercel": "^32.0.0"
+  }
+}

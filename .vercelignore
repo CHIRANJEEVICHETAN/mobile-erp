@@ -1,0 +1,17 @@
+# Ignore development files
+.git
+.gitignore
+README_MODULAR.md
+change-checklist.md
+deploy.sh
+backup/
+
+# Ignore original monolithic file
+index_original.html
+
+# Keep only production files
+!index.html
+!css/
+!js/
+!screens/
+!vercel.json
