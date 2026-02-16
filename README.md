@@ -3,7 +3,7 @@
 A comprehensive **Mobile Enterprise Resource Planning (ERP)** system designed for manufacturing businesses. Built with modern web technologies and deployed on Vercel for free hosting.
 
 ## 🚀 **Live Demo**
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/mobile-erp)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/CHIRANJEEVICHETAN/mobile-erp)
 
 ## ✨ **Features**
 
@@ -230,7 +230,9 @@ If `rewrites`, `redirects`, `headers`, `cleanUrls` or `trailingSlash` are used, 
 ### **Need Help?**
 - **Vercel Docs**: [vercel.com/docs](https://vercel.com/docs)
 - **Status Check**: `vercel --debug`
-- **Logs**: Check Vercel dashboard
+- **Redeploy**: `vercel --prod --force` (force fresh deployment)
+- **Logs**: Check Vercel dashboard → Functions/Deployments
+- **Browser Dev Tools**: Check Network tab for failed CSS/JS requests
 
 ## 🤝 **Contributing**
 
