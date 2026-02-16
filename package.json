@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "npx http-server -p 3000",
     "build": "echo 'Static site - no build required'",
-    "deploy": "vercel --prod",
-    "preview": "vercel"
+    "deploy": "npx vercel --prod",
+    "preview": "npx vercel"
   },
   "keywords": [
     "erp",
@@ -19,15 +19,14 @@
     "hr",
     "production"
   ],
-  "author": "Your Name",
+  "author": "CHIRANJEEVI CHETAN",
   "license": "MIT",
   "homepage": "https://mobile-erp.vercel.app",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/mobile-erp.git"
+    "url": "https://github.com/CHIRANJEEVICHETAN/mobile-erp"
   },
   "devDependencies": {
-    "http-server": "^14.1.1",
-    "vercel": "^32.0.0"
+    "http-server": "^14.1.1"
   }
 }

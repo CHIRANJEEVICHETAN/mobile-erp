@@ -1,10 +1,15 @@
 {
   "version": 2,
-  "name": "mobile-erp",
-  "rewrites": [
+  "builds": [
     {
-      "source": "/((?!css|js|screens).*)",
-      "destination": "/index.html"
+      "src": "index.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
     }
   ]
 }

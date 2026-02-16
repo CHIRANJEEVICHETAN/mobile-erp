@@ -128,26 +128,32 @@ mobile-erp/
 
 #### **Step-by-Step Deployment**
 
-1. **Install Vercel CLI**
+1. **Navigate to your project**
    ```bash
-   npm install -g vercel
+   cd /Users/chetan/Documents/Avyren-Technologies/Miscellaneous/Mobile-ERP
    ```
 
-2. **Login to Vercel**
+2. **Deploy to Vercel (using npx - no global install needed)**
    ```bash
-   vercel login
+   # First deployment (setup)
+   npm run deploy
+
+   # Or directly:
+   npx vercel
+
+   # Follow the prompts:
+   # - Link to existing project or create new? → Create new
+   # - Project name → mobile-erp (or your choice)
+   # - Directory → ./ (current directory)
    ```
 
-3. **Deploy your project**
+3. **Production Deployment**
    ```bash
-   # Navigate to your project directory
-   cd mobile-erp
+   # Deploy to production
+   npm run deploy
 
-   # Deploy to Vercel
-   vercel
-
-   # For production deployment
-   vercel --prod
+   # Or directly:
+   npx vercel --prod
    ```
 
 4. **Alternative: Use the deployment script**
@@ -226,6 +232,7 @@ If `rewrites`, `redirects`, `headers`, `cleanUrls` or `trailingSlash` are used, 
 - **404 on refresh**: Fixed with `rewrites` configuration
 - **Slow loading**: Optimized with `.vercelignore` and CDN
 - **CORS issues**: Static site - no backend required
+- **npm warnings**: Deprecated package warnings are normal and don't affect deployment
 
 ### **Need Help?**
 - **Vercel Docs**: [vercel.com/docs](https://vercel.com/docs)

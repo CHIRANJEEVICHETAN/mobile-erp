@@ -3,21 +3,15 @@
 echo "🚀 Deploying Mobile ERP to Vercel..."
 echo ""
 
-# Check if Vercel CLI is installed
-if ! command -v vercel &> /dev/null; then
-    echo "❌ Vercel CLI not found. Installing..."
-    npm install -g vercel
-fi
-
-# Check if logged in to Vercel
-if ! vercel whoami &> /dev/null; then
+# Check if logged in to Vercel (using npx)
+if ! npx vercel whoami &> /dev/null; then
     echo "🔐 Please login to Vercel:"
-    vercel login
+    npx vercel login
 fi
 
-# Deploy to Vercel
+# Deploy to Vercel using npx (no global install needed)
 echo "📦 Deploying to Vercel..."
-vercel --prod
+npx vercel --prod
 
 echo ""
 echo "✅ Deployment complete!"
