@@ -1,0 +1,110 @@
+            <!-- ============================= -->
+            <!-- Finance Screen                -->
+            <!-- ============================= -->
+            <div class="screen" id="finance">
+                <div class="sub-header">
+                    <div class="back-btn" onclick="showScreenDynamic('dashboard')"><i class="fas fa-arrow-left"></i></div>
+                    <h2>Finance</h2>
+                </div>
+                <div class="tabs" id="finTabs">
+                    <div class="tab active" onclick="switchTab('finTabs', 'finContent', 0)">Payables</div>
+                    <div class="tab" onclick="switchTab('finTabs', 'finContent', 1)">Receivables</div>
+                    <div class="tab" onclick="switchTab('finTabs', 'finContent', 2)">Payment In</div>
+                    <div class="tab" onclick="switchTab('finTabs', 'finContent', 3)">Reports</div>
+                </div>
+                <div id="finContent">
+                    <div class="tab-content active">
+                        <div class="card">
+                            <div class="card-title" style="margin-bottom: 16px;">Payment Summary</div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                                <div>
+                                    <div style="font-size: 24px; font-weight: 700; color: #ef4444;">₹8.2L</div>
+                                    <div style="font-size: 12px; color: #64748b;">Total Payables</div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-size: 24px; font-weight: 700; color: #10b981;">₹12.4L</div>
+                                    <div style="font-size: 12px; color: #64748b;">Total Receivables</div>
+                                </div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%;"></div>
+                            </div>
+                            <div
+                                style="display: flex; justify-content: space-between; font-size: 11px; color: #64748b; margin-top: 4px;">
+                                <span>Paid: ₹5.2L</span><span>Pending: ₹3L</span></div>
+                        </div>
+                        <div class="section-title">Upcoming Payments</div>
+                        <div class="list-item"
+                            onclick="openPaymentDetail('Steel Suppliers Ltd', 'INV-445', '2,50,000', 'Overdue')">
+                            <div class="list-icon" style="background: #fee2e2; color: #ef4444;"><i
+                                    class="fas fa-calendar-times"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">Steel Suppliers Ltd</div>
+                                <div class="list-subtitle">Invoice #INV-445 • Overdue</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">₹2,50,000</div><span class="list-status status-urgent">Pay
+                                    Now</span>
+                            </div>
+                        </div>
+                        <div class="list-item"
+                            onclick="openPaymentDetail('Parts Corporation', 'INV-446', '1,80,000', '3 Days')">
+                            <div class="list-icon" style="background: #fef3c7; color: #f59e0b;"><i
+                                    class="fas fa-calendar-day"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">Parts Corporation</div>
+                                <div class="list-subtitle">Invoice #INV-446 • Due: 15 Feb</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">₹1,80,000</div><span class="list-status status-pending">3
+                                    Days</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="section-title">Outstanding Receivables</div>
+                        <div class="list-item" onclick="openReceivableDetail('ABC Corp', 'INV-1235', '1,20,000')">
+                            <div class="list-icon" style="background: #fef3c7; color: #f59e0b;"><i
+                                    class="fas fa-hand-holding-usd"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">ABC Corporation</div>
+                                <div class="list-subtitle">INV-1235 • Due: 20 Feb</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">₹1,20,000</div><span class="list-status status-pending">Send
+                                    Reminder</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="section-title">Vendor Payment In</div>
+                        <div class="list-item" onclick="openModal('vendorPayment')">
+                            <div class="list-icon" style="background: #dbeafe; color: #3b82f6;"><i class="fas fa-file-invoice"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">Steel Suppliers Ltd</div>
+                                <div class="list-subtitle">INV-445 • ₹2,50,000</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-pending">Pay Now</span></div>
+                        </div>
+                        <div class="list-item" onclick="openModal('vendorPayment')">
+                            <div class="list-icon" style="background: #fef3c7; color: #f59e0b;"><i class="fas fa-file-invoice"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">Parts Corporation</div>
+                                <div class="list-subtitle">INV-446 • ₹1,80,000</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-info">Due in 3 days</span></div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="quick-actions">
+                            <div class="quick-action" onclick="showToast('Generating P&L Report...')"><i
+                                    class="fas fa-chart-pie"></i><span>P&L Report</span></div>
+                            <div class="quick-action" onclick="showToast('Generating Balance Sheet...')"><i
+                                    class="fas fa-balance-scale"></i><span>Balance Sheet</span></div>
+                            <div class="quick-action" onclick="showToast('Generating Cash Flow...')"><i
+                                    class="fas fa-money-bill-wave"></i><span>Cash Flow</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fab" onclick="openModal('payment')"><i class="fas fa-plus"></i></div>
+            </div>

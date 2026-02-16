@@ -1,36 +1,60 @@
 /* ============================================
    Mobile ERP - Core Application Logic
-   Navigation, Menu, Tabs, Toast, Role Selection
+   Navigation, menus, tabs, toasts, roles
    ============================================ */
 
 // Screen Navigation
 function showScreen(screenId) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById(screenId).classList.add('active');
+    const screen = document.getElementById(screenId);
+    if (screen) screen.classList.add('active');
+
+    // Update bottom nav
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    const navMap = { 'dashboard': 'nav-home', 'sales': 'nav-sales', 'inventory': 'nav-inventory', 'hr': 'nav-hr' };
-    if (navMap[screenId]) document.getElementById(navMap[screenId]).classList.add('active');
+    const navMap = {
+        'dashboard': 'nav-home',
+        'sales': 'nav-sales',
+        'inventory': 'nav-inventory',
+        'hr': 'nav-hr',
+        'vendor': 'nav-more',
+        'finance': 'nav-more',
+        'maintenance': 'nav-more',
+        'production': 'nav-more',
+        'visitor': 'nav-more',
+        'security': 'nav-more'
+    };
+    const navId = navMap[screenId];
+    if (navId) {
+        const navEl = document.getElementById(navId);
+        if (navEl) navEl.classList.add('active');
+    }
 }
 
-// Menu Toggle
+// Menu Drawer Toggle
 function toggleMenu() {
-    document.getElementById('menuOverlay').classList.toggle('active');
     document.getElementById('menuDrawer').classList.toggle('active');
+    document.getElementById('menuOverlay').classList.toggle('active');
 }
 
 // Tab Switching
 function switchTab(tabsId, contentId, index) {
-    const tabs = document.getElementById(tabsId).querySelectorAll('.tab');
-    const contents = document.getElementById(contentId).querySelectorAll('.tab-content');
-    tabs.forEach((t, i) => { t.classList.toggle('active', i === index); });
-    contents.forEach((c, i) => { c.classList.toggle('active', i === index); });
+    const tabs = document.getElementById(tabsId);
+    const content = document.getElementById(contentId);
+    if (!tabs || !content) return;
+
+    tabs.querySelectorAll('.tab').forEach((t, i) => {
+        t.classList.toggle('active', i === index);
+    });
+    content.querySelectorAll('.tab-content').forEach((c, i) => {
+        c.classList.toggle('active', i === index);
+    });
 }
 
 // Role Selection
 function selectRole(el) {
     document.querySelectorAll('.role-chip').forEach(c => c.classList.remove('active'));
     el.classList.add('active');
-    showToast('Switched to ' + el.textContent + ' view');
+    showToast('View: ' + el.textContent);
 }
 
 // Toast Notification
@@ -41,9 +65,9 @@ function showToast(msg) {
     setTimeout(() => toast.classList.remove('show'), 2500);
 }
 
-// Close modal on overlay click
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('modalOverlay').addEventListener('click', function(e) {
-        if (e.target === this) closeModal();
-    });
+// Modal Overlay Click
+document.addEventListener('click', function (e) {
+    if (e.target.id === 'modalOverlay') {
+        closeModal();
+    }
 });

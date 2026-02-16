@@ -1,0 +1,179 @@
+            <!-- ============================= -->
+            <!-- Sales Screen                  -->
+            <!-- ============================= -->
+            <div class="screen" id="sales">
+                <div class="sub-header">
+                    <div class="back-btn" onclick="showScreenDynamic('dashboard')"><i class="fas fa-arrow-left"></i></div>
+                    <h2>Sales & Invoicing</h2>
+                    <div class="sub-header-action" onclick="openModal('search')"><i class="fas fa-search"></i></div>
+                </div>
+                <div class="tabs" id="salesTabs">
+                    <div class="tab active" onclick="switchTab('salesTabs', 'salesContent', 0)">Sales Home</div>
+                    <div class="tab" onclick="switchTab('salesTabs', 'salesContent', 1)">Invoices</div>
+                    <div class="tab" onclick="switchTab('salesTabs', 'salesContent', 2)">Ledger</div>
+                    <div class="tab" onclick="switchTab('salesTabs', 'salesContent', 3)">PO Inward</div>
+                </div>
+                <div id="salesContent">
+                    <!-- Pipeline Tab -->
+                    <div class="tab-content active">
+                        <div class="stats-row">
+                            <div class="stat-card">
+                                <div class="stat-value" style="color: #10b981;">₹45L</div>
+                                <div class="stat-label">This Month</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" style="color: #f59e0b;">₹12L</div>
+                                <div class="stat-label">Outstanding</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" style="color: #3b82f6;">24</div>
+                                <div class="stat-label">Active Quotes</div>
+                            </div>
+                        </div>
+                        <div class="quick-actions">
+                            <div class="quick-action" onclick="openModal('quote')"><i class="fas fa-plus"></i><span>New
+                                    Quote</span></div>
+                            <div class="quick-action" onclick="openModal('invoice')"><i
+                                    class="fas fa-file-invoice"></i><span>Create Invoice</span></div>
+                            <div class="quick-action" onclick="openModal('customer')"><i
+                                    class="fas fa-user-plus"></i><span>Add Customer</span></div>
+                        </div>
+                        <div class="section-title">Sales Pipeline</div>
+                        <div class="list-item"
+                            onclick="openCustomerDetail('ABC Corporation', 'AC', 'Machinery Parts', '2,50,000', 'Quote Sent')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #10b981, #06b6d4);">AC</div>
+                            <div class="list-content">
+                                <div class="list-title">ABC Corporation</div>
+                                <div class="list-subtitle">Machinery Parts • Quote Sent</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">₹2,50,000</div><span
+                                    class="list-status status-info">Follow-up</span>
+                            </div>
+                        </div>
+                        <div class="list-item"
+                            onclick="openCustomerDetail('Tech Industries', 'TI', 'Raw Materials', '5,80,000', 'Negotiation')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">TI</div>
+                            <div class="list-content">
+                                <div class="list-title">Tech Industries</div>
+                                <div class="list-subtitle">Raw Materials • Negotiation</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">₹5,80,000</div><span class="list-status status-pending">Hot
+                                    Lead</span>
+                            </div>
+                        </div>
+                        <div class="list-item"
+                            onclick="openCustomerDetail('Global Mfg Ltd', 'GM', 'Equipment', '8,40,000', 'Order Confirmed')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">GM</div>
+                            <div class="list-content">
+                                <div class="list-title">Global Mfg Ltd</div>
+                                <div class="list-subtitle">Equipment • Order Confirmed</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">₹8,40,000</div><span
+                                    class="list-status status-approved">Won</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Invoices Tab -->
+                    <div class="tab-content">
+                        <div class="section-title">Recent Invoices</div>
+                        <div class="list-item"
+                            onclick="openInvoiceDetail('INV-2024-1234', 'ABC Corp', '45,000', 'Paid')">
+                            <div class="list-icon" style="background: #ecfdf5; color: #10b981;"><i
+                                    class="fas fa-file-invoice"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">INV-2024-1234</div>
+                                <div class="list-subtitle">ABC Corp • Due: 15 Feb</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">₹45,000</div><span
+                                    class="list-status status-approved">Paid</span>
+                            </div>
+                        </div>
+                        <div class="list-item" onclick="openInvoiceDetail('INV-2024-1235', 'Tech Industries', '1,20,000', 'Pending')" style="position: relative;">
+                            <div class="list-icon" style="background: #fef3c7; color: #f59e0b;"><i
+                                    class="fas fa-file-invoice"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">INV-2024-1235</div>
+                                <div class="list-subtitle">Tech Ind • Due: 20 Feb</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">₹1,20,000</div><span
+                                    class="list-status status-pending">Pending</span>
+                            </div>
+                            <div class="payment-action" onclick="event.stopPropagation(); openModal('paymentIn');" style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; cursor: pointer;">
+                                <i class="fas fa-rupee-sign"></i>
+                            </div>
+                        </div>
+                        <div class="list-item" onclick="openInvoiceDetail('INV-2024-1236', 'Global Mfg', '2,80,000', 'Overdue')" style="position: relative;">
+                            <div class="list-icon" style="background: #fee2e2; color: #ef4444;"><i
+                                    class="fas fa-file-invoice"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">INV-2024-1236</div>
+                                <div class="list-subtitle">Global Mfg • Due: 10 Feb</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">₹2,80,000</div><span
+                                    class="list-status status-urgent">Overdue</span>
+                            </div>
+                            <div class="payment-action" onclick="event.stopPropagation(); openModal('paymentIn');" style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; background: #ef4444; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; cursor: pointer;">
+                                <i class="fas fa-rupee-sign"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Ledger Tab -->
+                    <div class="tab-content">
+                        <div class="search-bar"><i class="fas fa-search"></i><input type="text"
+                                placeholder="Search customer..."></div>
+                        <div class="section-title">Customer Ledger</div>
+                        <div class="list-item" onclick="openLedgerDetail('ABC Corporation', '12,50,000', '2,50,000')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #10b981, #06b6d4);">AC</div>
+                            <div class="list-content">
+                                <div class="list-title">ABC Corporation</div>
+                                <div class="list-subtitle">Total Business: ₹12,50,000</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount" style="color: #ef4444;">₹2,50,000</div>
+                                <div class="list-subtitle">Outstanding</div>
+                            </div>
+                        </div>
+                        <div class="list-item" onclick="openLedgerDetail('Tech Industries', '8,40,000', '0')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">TI</div>
+                            <div class="list-content">
+                                <div class="list-title">Tech Industries</div>
+                                <div class="list-subtitle">Total Business: ₹8,40,000</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount" style="color: #10b981;">₹0</div>
+                                <div class="list-subtitle">Clear</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- PO Inward Tab -->
+                    <div class="tab-content">
+                        <div class="section-title">Customer PO Inward</div>
+                        <div class="quick-actions">
+                            <div class="quick-action" onclick="openModal('poInward')"><i class="fas fa-upload"></i><span>Import PO</span></div>
+                        </div>
+                        <div class="list-item" onclick="openPODetail('PO-CUST-2024-001', 'ABC Corporation', 'Pending Invoice')">
+                            <div class="list-icon" style="background: #dbeafe; color: #3b82f6;"><i class="fas fa-file-import"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">PO-CUST-2024-001</div>
+                                <div class="list-subtitle">ABC Corporation • ₹2,50,000</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-pending">Process</span></div>
+                        </div>
+                        <div class="list-item" onclick="openPODetail('PO-CUST-2024-002', 'Tech Industries', 'Invoice Created')">
+                            <div class="list-icon" style="background: #ecfdf5; color: #10b981;"><i class="fas fa-check-circle"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">PO-CUST-2024-002</div>
+                                <div class="list-subtitle">Tech Industries • ₹5,80,000</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-approved">Processed</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fab" onclick="openModal('poInward')"><i class="fas fa-upload"></i></div>
+            </div>

@@ -1,0 +1,127 @@
+            <!-- ============================= -->
+            <!-- Vendor Screen                 -->
+            <!-- ============================= -->
+            <div class="screen" id="vendor">
+                <div class="sub-header">
+                    <div class="back-btn" onclick="showScreenDynamic('dashboard')"><i class="fas fa-arrow-left"></i></div>
+                    <h2>Vendor Management</h2>
+                </div>
+                <div class="tabs" id="vendorTabs">
+                    <div class="tab active" onclick="switchTab('vendorTabs', 'vendorContent', 0)">Vendors</div>
+                    <div class="tab" onclick="switchTab('vendorTabs', 'vendorContent', 1)">POs</div>
+                    <div class="tab" onclick="switchTab('vendorTabs', 'vendorContent', 2)">ASN/GRN</div>
+                    <div class="tab" onclick="switchTab('vendorTabs', 'vendorContent', 3)">Masters</div>
+                </div>
+                <div id="vendorContent">
+                    <!-- Vendors Tab -->
+                    <div class="tab-content active">
+                        <div class="quick-actions">
+                            <div class="quick-action" onclick="openModal('po')"><i class="fas fa-plus"></i><span>New
+                                    PO</span></div>
+                            <div class="quick-action" onclick="openModal('asn')"><i
+                                    class="fas fa-shipping-fast"></i><span>Create ASN</span></div>
+                            <div class="quick-action" onclick="openModal('grn')"><i
+                                    class="fas fa-clipboard-check"></i><span>New GRN</span></div>
+                        </div>
+                        <div class="section-title">Top Vendors</div>
+                        <div class="list-item"
+                            onclick="openVendorDetail('Steel Suppliers Ltd', 'SS', '98%', '15,00,000')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #10b981, #06b6d4);">SS</div>
+                            <div class="list-content">
+                                <div class="list-title">Steel Suppliers Ltd</div>
+                                <div class="list-subtitle">Rating: ★★★★★ • 98% On-time</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">₹15L</div>
+                                <div class="list-subtitle">This Month</div>
+                            </div>
+                        </div>
+                        <div class="list-item" onclick="openVendorDetail('Parts Corporation', 'PC', '92%', '8,50,000')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">PC</div>
+                            <div class="list-content">
+                                <div class="list-title">Parts Corporation</div>
+                                <div class="list-subtitle">Rating: ★★★★☆ • 92% On-time</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">₹8.5L</div>
+                                <div class="list-subtitle">This Month</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- POs Tab -->
+                    <div class="tab-content">
+                        <div class="section-title">Active Purchase Orders</div>
+                        <div class="list-item" onclick="openPODetail('PO-2024-892', 'Steel Suppliers', 'In Transit')">
+                            <div class="list-icon" style="background: #dbeafe; color: #3b82f6;"><i
+                                    class="fas fa-file-alt"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">PO-2024-892</div>
+                                <div class="list-subtitle">Steel Suppliers • 12 items</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">₹3,50,000</div><span class="list-status status-info">In
+                                    Transit</span>
+                            </div>
+                        </div>
+                        <div class="list-item" onclick="openPODetail('PO-2024-891', 'Parts Corp', 'Confirmed')">
+                            <div class="list-icon" style="background: #ecfdf5; color: #10b981;"><i
+                                    class="fas fa-file-alt"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">PO-2024-891</div>
+                                <div class="list-subtitle">Parts Corp • 8 items</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">₹1,80,000</div><span
+                                    class="list-status status-approved">Confirmed</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ASN/GRN Tab -->
+                    <div class="tab-content">
+                        <div class="section-title">Pending Verifications</div>
+                        <div class="list-item" onclick="openASNDetail('ASN-2024-156', 'Steel Suppliers', 'At Gate')">
+                            <div class="list-icon" style="background: #fef3c7; color: #f59e0b;"><i
+                                    class="fas fa-truck"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">ASN-2024-156</div>
+                                <div class="list-subtitle">Steel Suppliers • Vehicle: MH12AB1234</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-pending">Verify at Gate</span></div>
+                        </div>
+                        <div class="section-title">Recent GRNs</div>
+                        <div class="list-item" onclick="openGRNDetail('GRN-2024-089', 'Parts Corp', 'Completed')">
+                            <div class="list-icon" style="background: #ecfdf5; color: #10b981;"><i
+                                    class="fas fa-clipboard-check"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">GRN-2024-089</div>
+                                <div class="list-subtitle">Parts Corp • 8 items received</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-approved">Completed</span></div>
+                        </div>
+                    </div>
+                    <!-- Masters Tab -->
+                    <div class="tab-content">
+                        <div class="section-title">Item Masters</div>
+                        <div class="quick-actions">
+                            <div class="quick-action" onclick="openModal('itemMaster')"><i class="fas fa-plus"></i><span>Add Item</span></div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon" style="background: #dbeafe; color: #3b82f6;"><i class="fas fa-cogs"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">Steel Rod 10mm</div>
+                                <div class="list-subtitle">Purchase Item • GST: 18% • SKU: SR-10MM</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-approved">Active</span></div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon" style="background: #ecfdf5; color: #10b981;"><i class="fas fa-box"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">Part A - Bracket</div>
+                                <div class="list-subtitle">Sales Item • GST: 18% • SKU: PA-BRKT</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-approved">Active</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fab" onclick="openModal('itemMaster')"><i class="fas fa-plus"></i></div>
+            </div>

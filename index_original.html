@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile ERP - Interactive Prototype</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <div class="phone-frame">
+        <div class="phone-screen">
+            <div class="notch"></div>
+            <div class="status-bar">
+                <span>9:41</span>
+                <span><i class="fas fa-signal"></i> <i class="fas fa-wifi"></i> <i
+                        class="fas fa-battery-full"></i></span>
+            </div>
+
+            <!-- Toast Notification -->
+            <div class="toast" id="toast">Action completed successfully!</div>
+
+            <!-- Menu Overlay & Drawer -->
+            <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+            <div class="menu-drawer" id="menuDrawer">
+                <div class="menu-header">
+                    <div class="menu-profile">
+                        <div class="menu-avatar"><i class="fas fa-user"></i></div>
+                        <div>
+                            <div class="menu-name">Admin User</div>
+                            <div class="menu-role">Super Admin</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-items">
+                    <div class="menu-item" onclick="showScreen('dashboard'); toggleMenu();"><i
+                            class="fas fa-home"></i><span>Dashboard</span></div>
+                    <div class="menu-item" onclick="showScreen('sales'); toggleMenu();"><i
+                            class="fas fa-chart-line"></i><span>Sales & Invoicing</span></div>
+                    <div class="menu-item" onclick="showScreen('inventory'); toggleMenu();"><i
+                            class="fas fa-boxes"></i><span>Inventory</span></div>
+                    <div class="menu-item" onclick="showScreen('vendor'); toggleMenu();"><i
+                            class="fas fa-truck"></i><span>Vendor Management</span></div>
+                    <div class="menu-item" onclick="showScreen('finance'); toggleMenu();"><i
+                            class="fas fa-wallet"></i><span>Finance</span></div>
+                    <div class="menu-item" onclick="showScreen('maintenance'); toggleMenu();"><i
+                            class="fas fa-wrench"></i><span>Machine Maintenance</span></div>
+                    <div class="menu-item" onclick="showScreen('hr'); toggleMenu();"><i
+                            class="fas fa-users"></i><span>HR Management</span></div>
+                    <div class="menu-item" onclick="showScreen('incentives'); toggleMenu();"><i
+                            class="fas fa-gift"></i><span>Production Incentives</span></div>
+                    <div class="menu-item" onclick="showScreen('visitor'); toggleMenu();"><i
+                            class="fas fa-id-card"></i><span>Visitor Management</span></div>
+                </div>
+            </div>
+
+            <!-- Modal Overlay -->
+            <div class="modal-overlay" id="modalOverlay">
+                <div class="modal" id="modalContent"></div>
+            </div>
+
+            <!-- ============================= -->
+            <!-- Dashboard Screen              -->
+            <!-- ============================= -->
+            <div class="screen active" id="dashboard">
+                <div class="header">
+                    <div class="header-top">
+                        <div>
+                            <h1>Mobile ERP</h1>
+                            <p>Good morning, Admin!</p>
+                        </div>
+                        <div class="header-icon" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+                    </div>
+                </div>
+                <div class="kpi-grid">
+                    <div class="kpi-card" onclick="showScreen('sales')">
+                        <div class="kpi-icon sales"><i class="fas fa-dollar-sign"></i></div>
+                        <div class="kpi-value">₹12.4L</div>
+                        <div class="kpi-label">Today's Sales</div>
+                        <div class="kpi-change">↑ 12% from yesterday</div>
+                    </div>
+                    <div class="kpi-card" onclick="showScreen('inventory')">
+                        <div class="kpi-icon inventory"><i class="fas fa-boxes"></i></div>
+                        <div class="kpi-value">847</div>
+                        <div class="kpi-label">Items in Stock</div>
+                        <div class="kpi-change negative">↓ 23 low stock alerts</div>
+                    </div>
+                    <div class="kpi-card" onclick="showScreen('finance')">
+                        <div class="kpi-icon finance"><i class="fas fa-file-invoice"></i></div>
+                        <div class="kpi-value">₹8.2L</div>
+                        <div class="kpi-label">Pending Payments</div>
+                        <div class="kpi-change">15 invoices due</div>
+                    </div>
+                    <div class="kpi-card" onclick="showScreen('vendor')">
+                        <div class="kpi-icon vendor"><i class="fas fa-truck"></i></div>
+                        <div class="kpi-value">12</div>
+                        <div class="kpi-label">Pending POs</div>
+                        <div class="kpi-change">3 ASN to verify</div>
+                    </div>
+                </div>
+                <div class="role-selector">
+                    <div class="role-chip active" onclick="selectRole(this)">All</div>
+                    <div class="role-chip" onclick="selectRole(this)">Owner</div>
+                    <div class="role-chip" onclick="selectRole(this)">Sales</div>
+                    <div class="role-chip" onclick="selectRole(this)">Operations</div>
+                    <div class="role-chip" onclick="selectRole(this)">HR</div>
+                </div>
+                <div class="section-title">Quick Access</div>
+                <div class="module-grid">
+                    <div class="module-item" onclick="showScreen('sales')">
+                        <div class="module-icon green"><i class="fas fa-file-invoice-dollar"></i></div>
+                        <div class="module-label">Sales</div>
+                    </div>
+                    <div class="module-item" onclick="showScreen('inventory')">
+                        <div class="module-icon blue"><i class="fas fa-warehouse"></i></div>
+                        <div class="module-label">Inventory</div>
+                    </div>
+                    <div class="module-item" onclick="showScreen('vendor')">
+                        <div class="module-icon orange"><i class="fas fa-truck-loading"></i></div>
+                        <div class="module-label">Vendors</div>
+                    </div>
+                    <div class="module-item" onclick="showScreen('finance')">
+                        <div class="module-icon purple"><i class="fas fa-wallet"></i></div>
+                        <div class="module-label">Finance</div>
+                    </div>
+                    <div class="module-item" onclick="showScreen('maintenance')">
+                        <div class="module-icon teal"><i class="fas fa-tools"></i></div>
+                        <div class="module-label">Maintenance</div>
+                    </div>
+                    <div class="module-item" onclick="showScreen('hr')">
+                        <div class="module-icon pink"><i class="fas fa-user-friends"></i></div>
+                        <div class="module-label">HR</div>
+                    </div>
+                    <div class="module-item" onclick="showScreen('incentives')">
+                        <div class="module-icon indigo"><i class="fas fa-award"></i></div>
+                        <div class="module-label">Incentives</div>
+                    </div>
+                    <div class="module-item" onclick="showScreen('visitor')">
+                        <div class="module-icon amber"><i class="fas fa-id-badge"></i></div>
+                        <div class="module-label">Visitors</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Sales Trend (Last 7 Days)</div>
+                        <div class="card-action" onclick="showScreen('sales')">View All</div>
+                    </div>
+                    <div class="chart-container">
+                        <div class="chart-bar" style="height: 60%"></div>
+                        <div class="chart-bar" style="height: 80%"></div>
+                        <div class="chart-bar" style="height: 45%"></div>
+                        <div class="chart-bar" style="height: 90%"></div>
+                        <div class="chart-bar" style="height: 70%"></div>
+                        <div class="chart-bar" style="height: 85%"></div>
+                        <div class="chart-bar" style="height: 95%"></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Recent Activities</div>
+                        <div class="card-action">See All</div>
+                    </div>
+                    <div class="list-item" onclick="openInvoiceDetail('INV-1234', 'ABC Corp', '45,000', 'Paid')">
+                        <div class="list-icon" style="background: #ecfdf5; color: #10b981;"><i class="fas fa-check"></i>
+                        </div>
+                        <div class="list-content">
+                            <div class="list-title">Invoice #1234 Paid</div>
+                            <div class="list-subtitle">ABC Corp • 10 mins ago</div>
+                        </div>
+                        <div class="list-value">
+                            <div class="list-amount">₹45,000</div>
+                        </div>
+                    </div>
+                    <div class="list-item" onclick="openPODetail('PO-892', 'Steel Suppliers', 'Pending GRN')">
+                        <div class="list-icon" style="background: #fef3c7; color: #f59e0b;"><i class="fas fa-truck"></i>
+                        </div>
+                        <div class="list-content">
+                            <div class="list-title">PO #892 Received</div>
+                            <div class="list-subtitle">Steel Suppliers • 1 hour ago</div>
+                        </div>
+                        <div class="list-value"><span class="list-status status-pending">Pending GRN</span></div>
+                    </div>
+                    <div class="list-item" onclick="openBreakdownDetail('Machine #5', 'Spindle Error')">
+                        <div class="list-icon" style="background: #fee2e2; color: #ef4444;"><i
+                                class="fas fa-exclamation"></i></div>
+                        <div class="list-content">
+                            <div class="list-title">Machine #5 Breakdown</div>
+                            <div class="list-subtitle">CNC Unit • 2 hours ago</div>
+                        </div>
+                        <div class="list-value"><span class="list-status status-urgent">Urgent</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================= -->
+            <!-- Sales Screen                  -->
+            <!-- ============================= -->
+            <div class="screen" id="sales">
+                <div class="sub-header">
+                    <div class="back-btn" onclick="showScreen('dashboard')"><i class="fas fa-arrow-left"></i></div>
+                    <h2>Sales & Invoicing</h2>
+                    <div class="sub-header-action" onclick="openModal('search')"><i class="fas fa-search"></i></div>
+                </div>
+                <div class="tabs" id="salesTabs">
+                    <div class="tab active" onclick="switchTab('salesTabs', 'salesContent', 0)">Pipeline</div>
+                    <div class="tab" onclick="switchTab('salesTabs', 'salesContent', 1)">Invoices</div>
+                    <div class="tab" onclick="switchTab('salesTabs', 'salesContent', 2)">Ledger</div>
+                </div>
+                <div id="salesContent">
+                    <!-- Pipeline Tab -->
+                    <div class="tab-content active">
+                        <div class="stats-row">
+                            <div class="stat-card">
+                                <div class="stat-value" style="color: #10b981;">₹45L</div>
+                                <div class="stat-label">This Month</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" style="color: #f59e0b;">₹12L</div>
+                                <div class="stat-label">Outstanding</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" style="color: #3b82f6;">24</div>
+                                <div class="stat-label">Active Quotes</div>
+                            </div>
+                        </div>
+                        <div class="quick-actions">
+                            <div class="quick-action" onclick="openModal('quote')"><i class="fas fa-plus"></i><span>New
+                                    Quote</span></div>
+                            <div class="quick-action" onclick="openModal('invoice')"><i
+                                    class="fas fa-file-invoice"></i><span>Create Invoice</span></div>
+                            <div class="quick-action" onclick="openModal('customer')"><i
+                                    class="fas fa-user-plus"></i><span>Add Customer</span></div>
+                        </div>
+                        <div class="section-title">Sales Pipeline</div>
+                        <div class="list-item"
+                            onclick="openCustomerDetail('ABC Corporation', 'AC', 'Machinery Parts', '2,50,000', 'Quote Sent')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #10b981, #06b6d4);">AC</div>
+                            <div class="list-content">
+                                <div class="list-title">ABC Corporation</div>
+                                <div class="list-subtitle">Machinery Parts • Quote Sent</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">₹2,50,000</div><span
+                                    class="list-status status-info">Follow-up</span>
+                            </div>
+                        </div>
+                        <div class="list-item"
+                            onclick="openCustomerDetail('Tech Industries', 'TI', 'Raw Materials', '5,80,000', 'Negotiation')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">TI</div>
+                            <div class="list-content">
+                                <div class="list-title">Tech Industries</div>
+                                <div class="list-subtitle">Raw Materials • Negotiation</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">₹5,80,000</div><span class="list-status status-pending">Hot
+                                    Lead</span>
+                            </div>
+                        </div>
+                        <div class="list-item"
+                            onclick="openCustomerDetail('Global Mfg Ltd', 'GM', 'Equipment', '8,40,000', 'Order Confirmed')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">GM</div>
+                            <div class="list-content">
+                                <div class="list-title">Global Mfg Ltd</div>
+                                <div class="list-subtitle">Equipment • Order Confirmed</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">₹8,40,000</div><span
+                                    class="list-status status-approved">Won</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Invoices Tab -->
+                    <div class="tab-content">
+                        <div class="section-title">Recent Invoices</div>
+                        <div class="list-item"
+                            onclick="openInvoiceDetail('INV-2024-1234', 'ABC Corp', '45,000', 'Paid')">
+                            <div class="list-icon" style="background: #ecfdf5; color: #10b981;"><i
+                                    class="fas fa-file-invoice"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">INV-2024-1234</div>
+                                <div class="list-subtitle">ABC Corp • Due: 15 Feb</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">₹45,000</div><span
+                                    class="list-status status-approved">Paid</span>
+                            </div>
+                        </div>
+                        <div class="list-item"
+                            onclick="openInvoiceDetail('INV-2024-1235', 'Tech Industries', '1,20,000', 'Pending')">
+                            <div class="list-icon" style="background: #fef3c7; color: #f59e0b;"><i
+                                    class="fas fa-file-invoice"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">INV-2024-1235</div>
+                                <div class="list-subtitle">Tech Ind • Due: 20 Feb</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">₹1,20,000</div><span
+                                    class="list-status status-pending">Pending</span>
+                            </div>
+                        </div>
+                        <div class="list-item"
+                            onclick="openInvoiceDetail('INV-2024-1236', 'Global Mfg', '2,80,000', 'Overdue')">
+                            <div class="list-icon" style="background: #fee2e2; color: #ef4444;"><i
+                                    class="fas fa-file-invoice"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">INV-2024-1236</div>
+                                <div class="list-subtitle">Global Mfg • Due: 10 Feb</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">₹2,80,000</div><span
+                                    class="list-status status-urgent">Overdue</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Ledger Tab -->
+                    <div class="tab-content">
+                        <div class="search-bar"><i class="fas fa-search"></i><input type="text"
+                                placeholder="Search customer..."></div>
+                        <div class="section-title">Customer Ledger</div>
+                        <div class="list-item" onclick="openLedgerDetail('ABC Corporation', '12,50,000', '2,50,000')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #10b981, #06b6d4);">AC</div>
+                            <div class="list-content">
+                                <div class="list-title">ABC Corporation</div>
+                                <div class="list-subtitle">Total Business: ₹12,50,000</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount" style="color: #ef4444;">₹2,50,000</div>
+                                <div class="list-subtitle">Outstanding</div>
+                            </div>
+                        </div>
+                        <div class="list-item" onclick="openLedgerDetail('Tech Industries', '8,40,000', '0')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">TI</div>
+                            <div class="list-content">
+                                <div class="list-title">Tech Industries</div>
+                                <div class="list-subtitle">Total Business: ₹8,40,000</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount" style="color: #10b981;">₹0</div>
+                                <div class="list-subtitle">Clear</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fab" onclick="openModal('invoice')"><i class="fas fa-plus"></i></div>
+            </div>
+
+            <!-- ============================= -->
+            <!-- Inventory Screen              -->
+            <!-- ============================= -->
+            <div class="screen" id="inventory">
+                <div class="sub-header">
+                    <div class="back-btn" onclick="showScreen('dashboard')"><i class="fas fa-arrow-left"></i></div>
+                    <h2>Inventory</h2>
+                    <div class="sub-header-action" onclick="openModal('scan')"><i class="fas fa-qrcode"></i></div>
+                </div>
+                <div class="tabs" id="invTabs">
+                    <div class="tab active" onclick="switchTab('invTabs', 'invContent', 0)">Stock</div>
+                    <div class="tab" onclick="switchTab('invTabs', 'invContent', 1)">Requests</div>
+                    <div class="tab" onclick="switchTab('invTabs', 'invContent', 2)">Issues</div>
+                </div>
+                <div id="invContent">
+                    <!-- Stock Tab -->
+                    <div class="tab-content active">
+                        <div class="search-bar"><i class="fas fa-search"></i><input type="text"
+                                placeholder="Search items, SKU..."></div>
+                        <div class="stats-row">
+                            <div class="stat-card">
+                                <div class="stat-value">847</div>
+                                <div class="stat-label">Total Items</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" style="color: #ef4444;">23</div>
+                                <div class="stat-label">Low Stock</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">3</div>
+                                <div class="stat-label">Warehouses</div>
+                            </div>
+                        </div>
+                        <div class="section-title">Low Stock Alerts</div>
+                        <div class="list-item"
+                            onclick="openStockDetail('Steel Rod 10mm', 'SR-10MM', '15', '100', 'Warehouse A')">
+                            <div class="list-icon" style="background: #fee2e2; color: #ef4444;"><i
+                                    class="fas fa-exclamation-triangle"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">Steel Rod 10mm</div>
+                                <div class="list-subtitle">SKU: SR-10MM • Warehouse A</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">15 pcs</div><span
+                                    class="list-status status-urgent">Critical</span>
+                            </div>
+                        </div>
+                        <div class="list-item"
+                            onclick="openStockDetail('Lubricant Oil 5L', 'LO-5L', '8', '50', 'Warehouse B')">
+                            <div class="list-icon" style="background: #fef3c7; color: #f59e0b;"><i
+                                    class="fas fa-exclamation-triangle"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">Lubricant Oil 5L</div>
+                                <div class="list-subtitle">SKU: LO-5L • Warehouse B</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">8 units</div><span
+                                    class="list-status status-pending">Low</span>
+                            </div>
+                        </div>
+                        <div class="list-item"
+                            onclick="openStockDetail('Bearing 6205', 'BR-6205', '25', '100', 'Warehouse A')">
+                            <div class="list-icon" style="background: #fef3c7; color: #f59e0b;"><i
+                                    class="fas fa-exclamation-triangle"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">Bearing 6205</div>
+                                <div class="list-subtitle">SKU: BR-6205 • Warehouse A</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">25 pcs</div><span class="list-status status-pending">Low</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Requests Tab -->
+                    <div class="tab-content">
+                        <div class="section-title">Pending Requests</div>
+                        <div class="list-item"
+                            onclick="openMRDetail('MR-2024-089', 'Production Line A', '5', 'Pending')">
+                            <div class="list-icon" style="background: #dbeafe; color: #3b82f6;"><i
+                                    class="fas fa-clipboard-list"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">MR-2024-089</div>
+                                <div class="list-subtitle">Production Line A • 5 items</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-pending">Pending</span></div>
+                        </div>
+                        <div class="list-item" onclick="openMRDetail('MR-2024-088', 'Maintenance', '3', 'Approved')">
+                            <div class="list-icon" style="background: #ecfdf5; color: #10b981;"><i
+                                    class="fas fa-clipboard-check"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">MR-2024-088</div>
+                                <div class="list-subtitle">Maintenance • 3 items</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-approved">Approved</span></div>
+                        </div>
+                    </div>
+                    <!-- Issues Tab -->
+                    <div class="tab-content">
+                        <div class="section-title">Recent Issues</div>
+                        <div class="list-item" onclick="openIssueDetail('MI-2024-045', 'Production Line B', '8')">
+                            <div class="list-icon" style="background: #ecfdf5; color: #10b981;"><i
+                                    class="fas fa-dolly"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">MI-2024-045</div>
+                                <div class="list-subtitle">Production Line B • 8 items</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-approved">Issued</span></div>
+                        </div>
+                        <div class="list-item" onclick="openIssueDetail('MI-2024-044', 'Maintenance Dept', '4')">
+                            <div class="list-icon" style="background: #ecfdf5; color: #10b981;"><i
+                                    class="fas fa-dolly"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">MI-2024-044</div>
+                                <div class="list-subtitle">Maintenance Dept • 4 items</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-approved">Issued</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fab" onclick="openModal('materialRequest')"><i class="fas fa-plus"></i></div>
+            </div>
+
+            <!-- ============================= -->
+            <!-- Vendor Screen                 -->
+            <!-- ============================= -->
+            <div class="screen" id="vendor">
+                <div class="sub-header">
+                    <div class="back-btn" onclick="showScreen('dashboard')"><i class="fas fa-arrow-left"></i></div>
+                    <h2>Vendor Management</h2>
+                </div>
+                <div class="tabs" id="vendorTabs">
+                    <div class="tab active" onclick="switchTab('vendorTabs', 'vendorContent', 0)">Vendors</div>
+                    <div class="tab" onclick="switchTab('vendorTabs', 'vendorContent', 1)">POs</div>
+                    <div class="tab" onclick="switchTab('vendorTabs', 'vendorContent', 2)">ASN/GRN</div>
+                </div>
+                <div id="vendorContent">
+                    <!-- Vendors Tab -->
+                    <div class="tab-content active">
+                        <div class="quick-actions">
+                            <div class="quick-action" onclick="openModal('po')"><i class="fas fa-plus"></i><span>New
+                                    PO</span></div>
+                            <div class="quick-action" onclick="openModal('asn')"><i
+                                    class="fas fa-shipping-fast"></i><span>Create ASN</span></div>
+                            <div class="quick-action" onclick="openModal('grn')"><i
+                                    class="fas fa-clipboard-check"></i><span>New GRN</span></div>
+                        </div>
+                        <div class="section-title">Top Vendors</div>
+                        <div class="list-item"
+                            onclick="openVendorDetail('Steel Suppliers Ltd', 'SS', '98%', '15,00,000')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #10b981, #06b6d4);">SS</div>
+                            <div class="list-content">
+                                <div class="list-title">Steel Suppliers Ltd</div>
+                                <div class="list-subtitle">Rating: ★★★★★ • 98% On-time</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">₹15L</div>
+                                <div class="list-subtitle">This Month</div>
+                            </div>
+                        </div>
+                        <div class="list-item" onclick="openVendorDetail('Parts Corporation', 'PC', '92%', '8,50,000')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">PC</div>
+                            <div class="list-content">
+                                <div class="list-title">Parts Corporation</div>
+                                <div class="list-subtitle">Rating: ★★★★☆ • 92% On-time</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">₹8.5L</div>
+                                <div class="list-subtitle">This Month</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- POs Tab -->
+                    <div class="tab-content">
+                        <div class="section-title">Active Purchase Orders</div>
+                        <div class="list-item" onclick="openPODetail('PO-2024-892', 'Steel Suppliers', 'In Transit')">
+                            <div class="list-icon" style="background: #dbeafe; color: #3b82f6;"><i
+                                    class="fas fa-file-alt"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">PO-2024-892</div>
+                                <div class="list-subtitle">Steel Suppliers • 12 items</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">₹3,50,000</div><span class="list-status status-info">In
+                                    Transit</span>
+                            </div>
+                        </div>
+                        <div class="list-item" onclick="openPODetail('PO-2024-891', 'Parts Corp', 'Confirmed')">
+                            <div class="list-icon" style="background: #ecfdf5; color: #10b981;"><i
+                                    class="fas fa-file-alt"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">PO-2024-891</div>
+                                <div class="list-subtitle">Parts Corp • 8 items</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">₹1,80,000</div><span
+                                    class="list-status status-approved">Confirmed</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ASN/GRN Tab -->
+                    <div class="tab-content">
+                        <div class="section-title">Pending Verifications</div>
+                        <div class="list-item" onclick="openASNDetail('ASN-2024-156', 'Steel Suppliers', 'At Gate')">
+                            <div class="list-icon" style="background: #fef3c7; color: #f59e0b;"><i
+                                    class="fas fa-truck"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">ASN-2024-156</div>
+                                <div class="list-subtitle">Steel Suppliers • Vehicle: MH12AB1234</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-pending">Verify at Gate</span></div>
+                        </div>
+                        <div class="section-title">Recent GRNs</div>
+                        <div class="list-item" onclick="openGRNDetail('GRN-2024-089', 'Parts Corp', 'Completed')">
+                            <div class="list-icon" style="background: #ecfdf5; color: #10b981;"><i
+                                    class="fas fa-clipboard-check"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">GRN-2024-089</div>
+                                <div class="list-subtitle">Parts Corp • 8 items received</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-approved">Completed</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fab" onclick="openModal('po')"><i class="fas fa-plus"></i></div>
+            </div>
+
+            <!-- ============================= -->
+            <!-- Finance Screen                -->
+            <!-- ============================= -->
+            <div class="screen" id="finance">
+                <div class="sub-header">
+                    <div class="back-btn" onclick="showScreen('dashboard')"><i class="fas fa-arrow-left"></i></div>
+                    <h2>Finance</h2>
+                </div>
+                <div class="tabs" id="finTabs">
+                    <div class="tab active" onclick="switchTab('finTabs', 'finContent', 0)">Payables</div>
+                    <div class="tab" onclick="switchTab('finTabs', 'finContent', 1)">Receivables</div>
+                    <div class="tab" onclick="switchTab('finTabs', 'finContent', 2)">Reports</div>
+                </div>
+                <div id="finContent">
+                    <div class="tab-content active">
+                        <div class="card">
+                            <div class="card-title" style="margin-bottom: 16px;">Payment Summary</div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                                <div>
+                                    <div style="font-size: 24px; font-weight: 700; color: #ef4444;">₹8.2L</div>
+                                    <div style="font-size: 12px; color: #64748b;">Total Payables</div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-size: 24px; font-weight: 700; color: #10b981;">₹12.4L</div>
+                                    <div style="font-size: 12px; color: #64748b;">Total Receivables</div>
+                                </div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%;"></div>
+                            </div>
+                            <div
+                                style="display: flex; justify-content: space-between; font-size: 11px; color: #64748b; margin-top: 4px;">
+                                <span>Paid: ₹5.2L</span><span>Pending: ₹3L</span></div>
+                        </div>
+                        <div class="section-title">Upcoming Payments</div>
+                        <div class="list-item"
+                            onclick="openPaymentDetail('Steel Suppliers Ltd', 'INV-445', '2,50,000', 'Overdue')">
+                            <div class="list-icon" style="background: #fee2e2; color: #ef4444;"><i
+                                    class="fas fa-calendar-times"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">Steel Suppliers Ltd</div>
+                                <div class="list-subtitle">Invoice #INV-445 • Overdue</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">₹2,50,000</div><span class="list-status status-urgent">Pay
+                                    Now</span>
+                            </div>
+                        </div>
+                        <div class="list-item"
+                            onclick="openPaymentDetail('Parts Corporation', 'INV-446', '1,80,000', '3 Days')">
+                            <div class="list-icon" style="background: #fef3c7; color: #f59e0b;"><i
+                                    class="fas fa-calendar-day"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">Parts Corporation</div>
+                                <div class="list-subtitle">Invoice #INV-446 • Due: 15 Feb</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">₹1,80,000</div><span class="list-status status-pending">3
+                                    Days</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="section-title">Outstanding Receivables</div>
+                        <div class="list-item" onclick="openReceivableDetail('ABC Corp', 'INV-1235', '1,20,000')">
+                            <div class="list-icon" style="background: #fef3c7; color: #f59e0b;"><i
+                                    class="fas fa-hand-holding-usd"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">ABC Corporation</div>
+                                <div class="list-subtitle">INV-1235 • Due: 20 Feb</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">₹1,20,000</div><span class="list-status status-pending">Send
+                                    Reminder</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="quick-actions">
+                            <div class="quick-action" onclick="showToast('Generating P&L Report...')"><i
+                                    class="fas fa-chart-pie"></i><span>P&L Report</span></div>
+                            <div class="quick-action" onclick="showToast('Generating Balance Sheet...')"><i
+                                    class="fas fa-balance-scale"></i><span>Balance Sheet</span></div>
+                            <div class="quick-action" onclick="showToast('Generating Cash Flow...')"><i
+                                    class="fas fa-money-bill-wave"></i><span>Cash Flow</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fab" onclick="openModal('payment')"><i class="fas fa-plus"></i></div>
+            </div>
+
+            <!-- ============================= -->
+            <!-- Maintenance Screen            -->
+            <!-- ============================= -->
+            <div class="screen" id="maintenance">
+                <div class="sub-header">
+                    <div class="back-btn" onclick="showScreen('dashboard')"><i class="fas fa-arrow-left"></i></div>
+                    <h2>Machine Maintenance</h2>
+                </div>
+                <div class="tabs" id="maintTabs">
+                    <div class="tab active" onclick="switchTab('maintTabs', 'maintContent', 0)">Schedule</div>
+                    <div class="tab" onclick="switchTab('maintTabs', 'maintContent', 1)">Breakdowns</div>
+                    <div class="tab" onclick="switchTab('maintTabs', 'maintContent', 2)">Spares</div>
+                </div>
+                <div id="maintContent">
+                    <div class="tab-content active">
+                        <div class="calendar-header">
+                            <h3 style="font-size: 16px; font-weight: 600;">February 2024</h3>
+                            <div class="calendar-nav"><button><i class="fas fa-chevron-left"></i></button><button><i
+                                        class="fas fa-chevron-right"></i></button></div>
+                        </div>
+                        <div class="calendar-days">
+                            <div class="calendar-day header">Su</div>
+                            <div class="calendar-day header">Mo</div>
+                            <div class="calendar-day header">Tu</div>
+                            <div class="calendar-day header">We</div>
+                            <div class="calendar-day header">Th</div>
+                            <div class="calendar-day header">Fr</div>
+                            <div class="calendar-day header">Sa</div>
+                            <div class="calendar-day"></div>
+                            <div class="calendar-day"></div>
+                            <div class="calendar-day"></div>
+                            <div class="calendar-day"></div>
+                            <div class="calendar-day">1</div>
+                            <div class="calendar-day">2</div>
+                            <div class="calendar-day">3</div>
+                            <div class="calendar-day">4</div>
+                            <div class="calendar-day has-event" onclick="showToast('2 scheduled maintenance')">5</div>
+                            <div class="calendar-day">6</div>
+                            <div class="calendar-day">7</div>
+                            <div class="calendar-day">8</div>
+                            <div class="calendar-day">9</div>
+                            <div class="calendar-day has-event" onclick="showToast('1 scheduled maintenance')">10</div>
+                            <div class="calendar-day">11</div>
+                            <div class="calendar-day today">12</div>
+                            <div class="calendar-day">13</div>
+                            <div class="calendar-day">14</div>
+                            <div class="calendar-day has-event" onclick="showToast('3 scheduled maintenance')">15</div>
+                            <div class="calendar-day">16</div>
+                            <div class="calendar-day">17</div>
+                        </div>
+                        <div class="section-title">Today's Schedule</div>
+                        <div class="list-item"
+                            onclick="openMaintenanceDetail('CNC Machine #3', 'Oil Change', '10:00 AM')">
+                            <div class="list-icon" style="background: #dbeafe; color: #3b82f6;"><i
+                                    class="fas fa-cog"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">CNC Machine #3</div>
+                                <div class="list-subtitle">Preventive • Oil Change</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-info">10:00 AM</span></div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="section-title">Active Breakdowns</div>
+                        <div class="list-item" onclick="openBreakdownDetail('CNC Machine #5', 'Spindle Error')">
+                            <div class="list-icon" style="background: #fee2e2; color: #ef4444;"><i
+                                    class="fas fa-exclamation-circle"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">CNC Machine #5</div>
+                                <div class="list-subtitle">Spindle Error • 2 hrs downtime</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-urgent">In Progress</span></div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="section-title">Spare Parts Inventory</div>
+                        <div class="list-item" onclick="openSpareDetail('Spindle Bearing', 'SB-001', '12')">
+                            <div class="list-icon" style="background: #ecfdf5; color: #10b981;"><i
+                                    class="fas fa-cogs"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">Spindle Bearing</div>
+                                <div class="list-subtitle">SKU: SB-001 • For CNC machines</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">12 pcs</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fab" onclick="openModal('breakdown')"><i class="fas fa-plus"></i></div>
+            </div>
+
+            <!-- ============================= -->
+            <!-- HR Screen                     -->
+            <!-- ============================= -->
+            <div class="screen" id="hr">
+                <div class="sub-header">
+                    <div class="back-btn" onclick="showScreen('dashboard')"><i class="fas fa-arrow-left"></i></div>
+                    <h2>HR Management</h2>
+                </div>
+                <div class="tabs" id="hrTabs">
+                    <div class="tab active" onclick="switchTab('hrTabs', 'hrContent', 0)">Employees</div>
+                    <div class="tab" onclick="switchTab('hrTabs', 'hrContent', 1)">Attendance</div>
+                    <div class="tab" onclick="switchTab('hrTabs', 'hrContent', 2)">Leaves</div>
+                    <div class="tab" onclick="switchTab('hrTabs', 'hrContent', 3)">Payroll</div>
+                </div>
+                <div id="hrContent">
+                    <div class="tab-content active">
+                        <div class="stats-row">
+                            <div class="stat-card">
+                                <div class="stat-value">156</div>
+                                <div class="stat-label">Total Staff</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" style="color: #10b981;">142</div>
+                                <div class="stat-label">Present</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" style="color: #f59e0b;">8</div>
+                                <div class="stat-label">On Leave</div>
+                            </div>
+                        </div>
+                        <div class="search-bar"><i class="fas fa-search"></i><input type="text"
+                                placeholder="Search employees..."></div>
+                        <div class="section-title">Recent Employees</div>
+                        <div class="list-item"
+                            onclick="openEmployeeDetail('Amit Verma', 'AV', 'Machine Operator', 'Production', 'EMP-156')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">AV</div>
+                            <div class="list-content">
+                                <div class="list-title">Amit Verma</div>
+                                <div class="list-subtitle">Production • Machine Operator</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-subtitle">EMP-156</div>
+                            </div>
+                        </div>
+                        <div class="list-item"
+                            onclick="openEmployeeDetail('Sunita Mehra', 'SM', 'Accountant', 'Accounts', 'EMP-155')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #ec4899, #f43f5e);">SM</div>
+                            <div class="list-content">
+                                <div class="list-title">Sunita Mehra</div>
+                                <div class="list-subtitle">Accounts • Accountant</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-subtitle">EMP-155</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="card">
+                            <div class="card-title">Today's Attendance</div>
+                            <div style="display: flex; justify-content: space-around; margin-top: 16px;">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 28px; font-weight: 700; color: #10b981;">142</div>
+                                    <div style="font-size: 12px; color: #64748b;">Present</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 28px; font-weight: 700; color: #ef4444;">6</div>
+                                    <div style="font-size: 12px; color: #64748b;">Absent</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 28px; font-weight: 700; color: #f59e0b;">8</div>
+                                    <div style="font-size: 12px; color: #64748b;">Leave</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="section-title">Pending Approvals</div>
+                        <div class="list-item"
+                            onclick="openLeaveDetail('Rahul Kumar', 'Casual Leave', '14-15 Feb', 'Pending')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #10b981, #06b6d4);">RK</div>
+                            <div class="list-content">
+                                <div class="list-title">Rahul Kumar</div>
+                                <div class="list-subtitle">Casual Leave • 14-15 Feb</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-pending">Approve</span></div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="card">
+                            <div class="card-title">Payroll Summary - Feb 2024</div>
+                            <div style="margin-top: 16px;">
+                                <div
+                                    style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f5f9;">
+                                    <span style="color: #64748b;">Total Employees</span><span
+                                        style="font-weight: 600;">156</span></div>
+                                <div
+                                    style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f5f9;">
+                                    <span style="color: #64748b;">Gross Salary</span><span
+                                        style="font-weight: 600;">₹28,50,000</span></div>
+                                <div
+                                    style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f5f9;">
+                                    <span style="color: #64748b;">Deductions</span><span
+                                        style="font-weight: 600; color: #ef4444;">₹3,20,000</span></div>
+                                <div style="display: flex; justify-content: space-between; padding: 8px 0;"><span
+                                        style="font-weight: 600;">Net Payable</span><span
+                                        style="font-weight: 700; color: #10b981;">₹25,30,000</span></div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" style="margin: 16px;"
+                            onclick="showToast('Processing payroll...')">Process Payroll</button>
+                    </div>
+                </div>
+                <div class="fab" onclick="openModal('employee')"><i class="fas fa-user-plus"></i></div>
+            </div>
+
+            <!-- ============================= -->
+            <!-- Incentives Screen             -->
+            <!-- ============================= -->
+            <div class="screen" id="incentives">
+                <div class="sub-header">
+                    <div class="back-btn" onclick="showScreen('dashboard')"><i class="fas fa-arrow-left"></i></div>
+                    <h2>Production Incentives</h2>
+                </div>
+                <div class="tabs" id="incTabs">
+                    <div class="tab active" onclick="switchTab('incTabs', 'incContent', 0)">Daily</div>
+                    <div class="tab" onclick="switchTab('incTabs', 'incContent', 1)">Weekly</div>
+                    <div class="tab" onclick="switchTab('incTabs', 'incContent', 2)">Monthly</div>
+                </div>
+                <div id="incContent">
+                    <div class="tab-content active">
+                        <div class="card">
+                            <div class="card-title" style="margin-bottom: 16px;">Today's Production</div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                                <div>
+                                    <div style="font-size: 28px; font-weight: 700; color: #10b981;">892</div>
+                                    <div style="font-size: 12px; color: #64748b;">Units Produced</div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-size: 28px; font-weight: 700; color: #3b82f6;">1000</div>
+                                    <div style="font-size: 12px; color: #64748b;">Target</div>
+                                </div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 89%;"></div>
+                            </div>
+                            <div
+                                style="display: flex; justify-content: space-between; font-size: 11px; color: #64748b; margin-top: 4px;">
+                                <span>89% Complete</span><span>108 units to go</span></div>
+                        </div>
+                        <div class="section-title">Top Performers Today</div>
+                        <div class="list-item" onclick="openWorkerDetail('Suresh Kumar', 'Line A', '145', '580')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">🥇</div>
+                            <div class="list-content">
+                                <div class="list-title">Suresh Kumar</div>
+                                <div class="list-subtitle">Line A • 145 units</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount" style="color: #10b981;">+₹580</div>
+                                <div class="list-subtitle">Incentive</div>
+                            </div>
+                        </div>
+                        <div class="list-item" onclick="openWorkerDetail('Ramesh Yadav', 'Line B', '138', '520')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #94a3b8, #cbd5e1);">🥈</div>
+                            <div class="list-content">
+                                <div class="list-title">Ramesh Yadav</div>
+                                <div class="list-subtitle">Line B • 138 units</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount" style="color: #10b981;">+₹520</div>
+                                <div class="list-subtitle">Incentive</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="card">
+                            <div class="card-title">This Week</div>
+                            <div style="display: flex; justify-content: space-around; margin-top: 16px;">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 24px; font-weight: 700; color: #10b981;">4,580</div>
+                                    <div style="font-size: 12px; color: #64748b;">Units</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 24px; font-weight: 700; color: #3b82f6;">5,000</div>
+                                    <div style="font-size: 12px; color: #64748b;">Target</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 24px; font-weight: 700; color: #f59e0b;">₹18.5K</div>
+                                    <div style="font-size: 12px; color: #64748b;">Incentives</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="card">
+                            <div class="card-title">February 2024</div>
+                            <div style="display: flex; justify-content: space-around; margin-top: 16px;">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 24px; font-weight: 700; color: #10b981;">18,420</div>
+                                    <div style="font-size: 12px; color: #64748b;">Units</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 24px; font-weight: 700; color: #3b82f6;">20,000</div>
+                                    <div style="font-size: 12px; color: #64748b;">Target</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 24px; font-weight: 700; color: #f59e0b;">₹72K</div>
+                                    <div style="font-size: 12px; color: #64748b;">Incentives</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================= -->
+            <!-- Visitor Screen                -->
+            <!-- ============================= -->
+            <div class="screen" id="visitor">
+                <div class="sub-header">
+                    <div class="back-btn" onclick="showScreen('dashboard')"><i class="fas fa-arrow-left"></i></div>
+                    <h2>Visitor Management</h2>
+                </div>
+                <div class="tabs" id="visTabs">
+                    <div class="tab active" onclick="switchTab('visTabs', 'visContent', 0)">Today</div>
+                    <div class="tab" onclick="switchTab('visTabs', 'visContent', 1)">Pre-Register</div>
+                    <div class="tab" onclick="switchTab('visTabs', 'visContent', 2)">History</div>
+                </div>
+                <div id="visContent">
+                    <div class="tab-content active">
+                        <div class="stats-row">
+                            <div class="stat-card">
+                                <div class="stat-value">12</div>
+                                <div class="stat-label">Total Today</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" style="color: #10b981;">8</div>
+                                <div class="stat-label">Checked In</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" style="color: #64748b;">4</div>
+                                <div class="stat-label">Expected</div>
+                            </div>
+                        </div>
+                        <div class="visitor-badge"
+                            onclick="openVisitorDetail('Rajesh Gupta', 'ABC Technologies', 'Amit Shah', '10:30 AM', 'V-045')">
+                            <div class="badge-photo"><i class="fas fa-user"></i></div>
+                            <div class="badge-name">Rajesh Gupta</div>
+                            <div class="badge-company">ABC Technologies</div>
+                            <div class="badge-qr"><i class="fas fa-qrcode" style="font-size: 60px; color: #94a3b8;"></i>
+                            </div>
+                            <div class="badge-info">
+                                <div class="badge-info-item">
+                                    <div class="badge-info-label">Check In</div>
+                                    <div class="badge-info-value">10:30 AM</div>
+                                </div>
+                                <div class="badge-info-item">
+                                    <div class="badge-info-label">Host</div>
+                                    <div class="badge-info-value">Amit Shah</div>
+                                </div>
+                                <div class="badge-info-item">
+                                    <div class="badge-info-label">Badge #</div>
+                                    <div class="badge-info-value">V-045</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="section-title">Current Visitors</div>
+                        <div class="list-item"
+                            onclick="openVisitorDetail('Sunil Kapoor', 'Vendor Visit', 'Ravi Kumar', '09:15 AM', 'V-044')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">SK</div>
+                            <div class="list-content">
+                                <div class="list-title">Sunil Kapoor</div>
+                                <div class="list-subtitle">Vendor • Host: Ravi Kumar</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-approved">In</span></div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="section-title">Pre-Register New Visitor</div>
+                        <div class="card">
+                            <div class="form-group"><label class="form-label">Visitor Name</label><input type="text"
+                                    class="form-input" placeholder="Enter name"></div>
+                            <div class="form-group"><label class="form-label">Company</label><input type="text"
+                                    class="form-input" placeholder="Enter company"></div>
+                            <div class="form-group"><label class="form-label">Host Employee</label><select
+                                    class="form-select">
+                                    <option>Select host</option>
+                                    <option>Amit Shah</option>
+                                    <option>Ravi Kumar</option>
+                                </select></div>
+                            <div class="form-group"><label class="form-label">Visit Date & Time</label><input
+                                    type="datetime-local" class="form-input"></div>
+                            <button class="btn btn-primary"
+                                onclick="showToast('Visitor pre-registered successfully!')">Pre-Register
+                                Visitor</button>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="section-title">Recent Visitors</div>
+                        <div class="list-item">
+                            <div class="avatar" style="background: linear-gradient(135deg, #10b981, #06b6d4);">PM</div>
+                            <div class="list-content">
+                                <div class="list-title">Pradeep Mehta</div>
+                                <div class="list-subtitle">Client • 11 Feb 2024</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-info">Completed</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fab" onclick="openModal('visitor')"><i class="fas fa-user-plus"></i></div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div class="bottom-nav">
+                <div class="nav-item active" id="nav-home" onclick="showScreen('dashboard')"><i
+                        class="fas fa-home"></i><span>Home</span></div>
+                <div class="nav-item" id="nav-sales" onclick="showScreen('sales')"><i
+                        class="fas fa-chart-line"></i><span>Sales</span></div>
+                <div class="nav-item" id="nav-inventory" onclick="showScreen('inventory')"><i
+                        class="fas fa-boxes"></i><span>Inventory</span></div>
+                <div class="nav-item" id="nav-hr" onclick="showScreen('hr')"><i class="fas fa-users"></i><span>HR</span>
+                </div>
+                <div class="nav-item" id="nav-more" onclick="toggleMenu()"><i class="fas fa-th"></i><span>More</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Modules -->
+    <script src="js/app.js"></script>
+    <script src="js/modals.js"></script>
+    <script src="js/details.js"></script>
+</body>
+
+</html>

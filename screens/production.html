@@ -1,0 +1,141 @@
+            <!-- ============================= -->
+            <!-- Production Screen              -->
+            <!-- ============================= -->
+            <div class="screen" id="production">
+                <div class="sub-header">
+                    <div class="back-btn" onclick="showScreenDynamic('dashboard')"><i class="fas fa-arrow-left"></i></div>
+                    <h2>Production</h2>
+                </div>
+                <div class="tabs" id="prodTabs">
+                    <div class="tab active" onclick="switchTab('prodTabs', 'prodContent', 0)">OEE Dashboard</div>
+                    <div class="tab" onclick="switchTab('prodTabs', 'prodContent', 1)">Production Input</div>
+                    <div class="tab" onclick="switchTab('prodTabs', 'prodContent', 2)">Shift Master</div>
+                    <div class="tab" onclick="switchTab('prodTabs', 'prodContent', 3)">Scrap/NC</div>
+                </div>
+                <div id="prodContent">
+                    <!-- OEE Dashboard Tab -->
+                    <div class="tab-content active">
+                        <div class="section-title">Machine OEE Dashboard</div>
+                        <div class="oee-card" onclick="openOEEDetail('CNC Machine #1', '85', '92', '89', '96')">
+                            <div class="oee-header">
+                                <div class="oee-machine">CNC Machine #1</div>
+                                <div class="oee-badge oee-badge-high">85%</div>
+                            </div>
+                            <div class="oee-metrics">
+                                <div class="oee-metric">
+                                    <div class="oee-metric-value" style="color:#10b981;">92%</div>
+                                    <div class="oee-metric-label">Availability</div>
+                                </div>
+                                <div class="oee-metric">
+                                    <div class="oee-metric-value" style="color:#3b82f6;">89%</div>
+                                    <div class="oee-metric-label">Performance</div>
+                                </div>
+                                <div class="oee-metric">
+                                    <div class="oee-metric-value" style="color:#f59e0b;">96%</div>
+                                    <div class="oee-metric-label">Quality</div>
+                                </div>
+                            </div>
+                            <div class="oee-bar-track">
+                                <div class="oee-bar-fill oee-bar-fill-high" style="width: 85%;"></div>
+                            </div>
+                        </div>
+                        <div class="oee-card" onclick="openOEEDetail('Lathe #2', '72', '88', '76', '92')">
+                            <div class="oee-header">
+                                <div class="oee-machine">Lathe #2</div>
+                                <div class="oee-badge oee-badge-medium">72%</div>
+                            </div>
+                            <div class="oee-metrics">
+                                <div class="oee-metric">
+                                    <div class="oee-metric-value" style="color:#10b981;">88%</div>
+                                    <div class="oee-metric-label">Availability</div>
+                                </div>
+                                <div class="oee-metric">
+                                    <div class="oee-metric-value" style="color:#3b82f6;">76%</div>
+                                    <div class="oee-metric-label">Performance</div>
+                                </div>
+                                <div class="oee-metric">
+                                    <div class="oee-metric-value" style="color:#f59e0b;">92%</div>
+                                    <div class="oee-metric-label">Quality</div>
+                                </div>
+                            </div>
+                            <div class="oee-bar-track">
+                                <div class="oee-bar-fill oee-bar-fill-medium" style="width: 72%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Production Input Tab -->
+                    <div class="tab-content">
+                        <div class="section-title">Production Input</div>
+                        <div class="quick-actions">
+                            <div class="quick-action" onclick="openModal('productionInput')"><i class="fas fa-plus"></i><span>Add Entry</span></div>
+                        </div>
+                        <div class="list-item" onclick="openProductionDetail('Suresh Kumar', 'Part A - Bracket', 'Turning', '145', 'Morning')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">SK</div>
+                            <div class="list-content">
+                                <div class="list-title">Suresh Kumar</div>
+                                <div class="list-subtitle">Part A - Bracket • Turning • 145 units</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-approved">Morning</span></div>
+                        </div>
+                        <div class="list-item" onclick="openProductionDetail('Ramesh Yadav', 'Part B - Housing', 'Milling', '132', 'Afternoon')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #94a3b8, #cbd5e1);">RY</div>
+                            <div class="list-content">
+                                <div class="list-title">Ramesh Yadav</div>
+                                <div class="list-subtitle">Part B - Housing • Milling • 132 units</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-approved">Afternoon</span></div>
+                        </div>
+                    </div>
+                    <!-- Shift Master Tab -->
+                    <div class="tab-content">
+                        <div class="section-title">Shift Management</div>
+                        <div class="quick-actions">
+                            <div class="quick-action" onclick="openModal('shiftMaster')"><i class="fas fa-plus"></i><span>Add Shift</span></div>
+                        </div>
+                        <div class="shift-card">
+                            <div class="shift-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">
+                                <i class="fas fa-sun"></i>
+                            </div>
+                            <div class="shift-info">
+                                <div class="shift-name">Morning Shift</div>
+                                <div class="shift-time">6:00 AM - 2:00 PM</div>
+                                <div class="shift-meta">30 min break • Mon-Sat</div>
+                            </div>
+                        </div>
+                        <div class="shift-card">
+                            <div class="shift-icon" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">
+                                <i class="fas fa-moon"></i>
+                            </div>
+                            <div class="shift-info">
+                                <div class="shift-name">Night Shift</div>
+                                <div class="shift-time">10:00 PM - 6:00 AM</div>
+                                <div class="shift-meta">45 min break • Mon-Sat</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Scrap/NC Tab -->
+                    <div class="tab-content">
+                        <div class="section-title">Scrap/NC Entry</div>
+                        <div class="quick-actions">
+                            <div class="quick-action" onclick="openModal('scrapEntry')"><i class="fas fa-plus"></i><span>Add Entry</span></div>
+                        </div>
+                        <div class="list-item" onclick="openScrapDetail('Part A - Bracket', '8', '3', 'Tool Wear', 'Morning')">
+                            <div class="list-icon" style="background: #fee2e2; color: #ef4444;"><i class="fas fa-times-circle"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">Part A - Bracket</div>
+                                <div class="list-subtitle">8 Scrap + 3 NC • Tool Wear</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-urgent">Morning</span></div>
+                        </div>
+                        <div class="list-item" onclick="openScrapDetail('Part C - Shaft', '5', '1', 'Material Defect', 'Afternoon')">
+                            <div class="list-icon" style="background: #fef3c7; color: #f59e0b;"><i class="fas fa-exclamation-triangle"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">Part C - Shaft</div>
+                                <div class="list-subtitle">5 Scrap + 1 NC • Material Defect</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-pending">Afternoon</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fab" onclick="openModal('productionInput')"><i class="fas fa-plus"></i></div>
+            </div>

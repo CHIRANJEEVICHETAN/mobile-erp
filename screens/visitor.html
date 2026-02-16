@@ -1,0 +1,96 @@
+            <!-- ============================= -->
+            <!-- Visitor Screen                -->
+            <!-- ============================= -->
+            <div class="screen" id="visitor">
+                <div class="sub-header">
+                    <div class="back-btn" onclick="showScreenDynamic('dashboard')"><i class="fas fa-arrow-left"></i></div>
+                    <h2>Visitor Management</h2>
+                </div>
+                <div class="tabs" id="visTabs">
+                    <div class="tab active" onclick="switchTab('visTabs', 'visContent', 0)">Today</div>
+                    <div class="tab" onclick="switchTab('visTabs', 'visContent', 1)">Pre-Register</div>
+                    <div class="tab" onclick="switchTab('visTabs', 'visContent', 2)">History</div>
+                </div>
+                <div id="visContent">
+                    <div class="tab-content active">
+                        <div class="stats-row">
+                            <div class="stat-card">
+                                <div class="stat-value">12</div>
+                                <div class="stat-label">Total Today</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" style="color: #10b981;">8</div>
+                                <div class="stat-label">Checked In</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" style="color: #64748b;">4</div>
+                                <div class="stat-label">Expected</div>
+                            </div>
+                        </div>
+                        <div class="visitor-badge"
+                            onclick="openVisitorDetail('Rajesh Gupta', 'ABC Technologies', 'Amit Shah', '10:30 AM', 'V-045')">
+                            <div class="badge-photo"><i class="fas fa-user"></i></div>
+                            <div class="badge-name">Rajesh Gupta</div>
+                            <div class="badge-company">ABC Technologies</div>
+                            <div class="badge-qr"><i class="fas fa-qrcode" style="font-size: 60px; color: #94a3b8;"></i>
+                            </div>
+                            <div class="badge-info">
+                                <div class="badge-info-item">
+                                    <div class="badge-info-label">Check In</div>
+                                    <div class="badge-info-value">10:30 AM</div>
+                                </div>
+                                <div class="badge-info-item">
+                                    <div class="badge-info-label">Host</div>
+                                    <div class="badge-info-value">Amit Shah</div>
+                                </div>
+                                <div class="badge-info-item">
+                                    <div class="badge-info-label">Badge #</div>
+                                    <div class="badge-info-value">V-045</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="section-title">Current Visitors</div>
+                        <div class="list-item"
+                            onclick="openVisitorDetail('Sunil Kapoor', 'Vendor Visit', 'Ravi Kumar', '09:15 AM', 'V-044')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">SK</div>
+                            <div class="list-content">
+                                <div class="list-title">Sunil Kapoor</div>
+                                <div class="list-subtitle">Vendor • Host: Ravi Kumar</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-approved">In</span></div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="section-title">Pre-Register New Visitor</div>
+                        <div class="card">
+                            <div class="form-group"><label class="form-label">Visitor Name</label><input type="text"
+                                    class="form-input" placeholder="Enter name"></div>
+                            <div class="form-group"><label class="form-label">Company</label><input type="text"
+                                    class="form-input" placeholder="Enter company"></div>
+                            <div class="form-group"><label class="form-label">Host Employee</label><select
+                                    class="form-select">
+                                    <option>Select host</option>
+                                    <option>Amit Shah</option>
+                                    <option>Ravi Kumar</option>
+                                </select></div>
+                            <div class="form-group"><label class="form-label">Visit Date & Time</label><input
+                                    type="datetime-local" class="form-input"></div>
+                            <button class="btn btn-primary"
+                                onclick="showToast('Visitor pre-registered successfully!')">Pre-Register
+                                Visitor</button>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="section-title">Recent Visitors</div>
+                        <div class="list-item">
+                            <div class="avatar" style="background: linear-gradient(135deg, #10b981, #06b6d4);">PM</div>
+                            <div class="list-content">
+                                <div class="list-title">Pradeep Mehta</div>
+                                <div class="list-subtitle">Client • 11 Feb 2024</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-info">Completed</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fab" onclick="openModal('visitor')"><i class="fas fa-user-plus"></i></div>
+            </div>

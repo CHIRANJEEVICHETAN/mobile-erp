@@ -1,0 +1,115 @@
+            <!-- ============================= -->
+            <!-- Maintenance Screen            -->
+            <!-- ============================= -->
+            <div class="screen" id="maintenance">
+                <div class="sub-header">
+                    <div class="back-btn" onclick="showScreenDynamic('dashboard')"><i class="fas fa-arrow-left"></i></div>
+                    <h2>Machine Maintenance</h2>
+                </div>
+                <div class="tabs" id="maintTabs">
+                    <div class="tab active" onclick="switchTab('maintTabs', 'maintContent', 0)">Schedule</div>
+                    <div class="tab" onclick="switchTab('maintTabs', 'maintContent', 1)">Breakdowns</div>
+                    <div class="tab" onclick="switchTab('maintTabs', 'maintContent', 2)">Spares</div>
+                    <div class="tab" onclick="switchTab('maintTabs', 'maintContent', 3)">Masters</div>
+                </div>
+                <div id="maintContent">
+                    <div class="tab-content active">
+                        <div class="calendar-header">
+                            <h3 style="font-size: 16px; font-weight: 600;">February 2024</h3>
+                            <div class="calendar-nav"><button><i class="fas fa-chevron-left"></i></button><button><i
+                                        class="fas fa-chevron-right"></i></button></div>
+                        </div>
+                        <div class="calendar-days">
+                            <div class="calendar-day header">Su</div>
+                            <div class="calendar-day header">Mo</div>
+                            <div class="calendar-day header">Tu</div>
+                            <div class="calendar-day header">We</div>
+                            <div class="calendar-day header">Th</div>
+                            <div class="calendar-day header">Fr</div>
+                            <div class="calendar-day header">Sa</div>
+                            <div class="calendar-day"></div>
+                            <div class="calendar-day"></div>
+                            <div class="calendar-day"></div>
+                            <div class="calendar-day"></div>
+                            <div class="calendar-day">1</div>
+                            <div class="calendar-day">2</div>
+                            <div class="calendar-day">3</div>
+                            <div class="calendar-day">4</div>
+                            <div class="calendar-day has-event" onclick="showToast('2 scheduled maintenance')">5</div>
+                            <div class="calendar-day">6</div>
+                            <div class="calendar-day">7</div>
+                            <div class="calendar-day">8</div>
+                            <div class="calendar-day">9</div>
+                            <div class="calendar-day has-event" onclick="showToast('1 scheduled maintenance')">10</div>
+                            <div class="calendar-day">11</div>
+                            <div class="calendar-day today">12</div>
+                            <div class="calendar-day">13</div>
+                            <div class="calendar-day">14</div>
+                            <div class="calendar-day has-event" onclick="showToast('3 scheduled maintenance')">15</div>
+                            <div class="calendar-day">16</div>
+                            <div class="calendar-day">17</div>
+                        </div>
+                        <div class="section-title">Today's Schedule</div>
+                        <div class="list-item"
+                            onclick="openMaintenanceDetail('CNC Machine #3', 'Oil Change', '10:00 AM')">
+                            <div class="list-icon" style="background: #dbeafe; color: #3b82f6;"><i
+                                    class="fas fa-cog"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">CNC Machine #3</div>
+                                <div class="list-subtitle">Preventive • Oil Change</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-info">10:00 AM</span></div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="section-title">Active Breakdowns</div>
+                        <div class="list-item" onclick="openBreakdownDetail('CNC Machine #5', 'Spindle Error')">
+                            <div class="list-icon" style="background: #fee2e2; color: #ef4444;"><i
+                                    class="fas fa-exclamation-circle"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">CNC Machine #5</div>
+                                <div class="list-subtitle">Spindle Error • 2 hrs downtime</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-urgent">In Progress</span></div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="section-title">Spare Parts Inventory</div>
+                        <div class="list-item" onclick="openSpareDetail('Spindle Bearing', 'SB-001', '12')">
+                            <div class="list-icon" style="background: #ecfdf5; color: #10b981;"><i
+                                    class="fas fa-cogs"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">Spindle Bearing</div>
+                                <div class="list-subtitle">SKU: SB-001 • For CNC machines</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">12 pcs</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Masters Tab -->
+                    <div class="tab-content">
+                        <div class="section-title">Preventive Maintenance Schedules</div>
+                        <div class="quick-actions">
+                            <div class="quick-action" onclick="openModal('preventiveMaintenance')"><i class="fas fa-plus"></i><span>Add Schedule</span></div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon" style="background: #dbeafe; color: #3b82f6;"><i class="fas fa-calendar-check"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">CNC Machine #1 - Oil Change</div>
+                                <div class="list-subtitle">Weekly • Next Due: 18 Feb 2024</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-approved">Active</span></div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon" style="background: #ecfdf5; color: #10b981;"><i class="fas fa-wrench"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">Lathe #1 - Belt Inspection</div>
+                                <div class="list-subtitle">Monthly • Next Due: 15 Mar 2024</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-approved">Active</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fab" onclick="openModal('preventiveMaintenance')"><i class="fas fa-calendar-plus"></i></div>
+            </div>

@@ -1,0 +1,145 @@
+            <!-- ============================= -->
+            <!-- Inventory Screen              -->
+            <!-- ============================= -->
+            <div class="screen" id="inventory">
+                <div class="sub-header">
+                    <div class="back-btn" onclick="showScreenDynamic('dashboard')"><i class="fas fa-arrow-left"></i></div>
+                    <h2>Inventory</h2>
+                    <div class="sub-header-action" onclick="openModal('scan')"><i class="fas fa-qrcode"></i></div>
+                </div>
+                <div class="tabs" id="invTabs">
+                    <div class="tab active" onclick="switchTab('invTabs', 'invContent', 0)">Stock</div>
+                    <div class="tab" onclick="switchTab('invTabs', 'invContent', 1)">Requests</div>
+                    <div class="tab" onclick="switchTab('invTabs', 'invContent', 2)">Issues</div>
+                    <div class="tab" onclick="switchTab('invTabs', 'invContent', 3)">Receipt</div>
+                </div>
+                <div id="invContent">
+                    <!-- Stock Tab -->
+                    <div class="tab-content active">
+                        <div class="search-bar"><i class="fas fa-search"></i><input type="text"
+                                placeholder="Search items, SKU..."></div>
+                        <div class="stats-row">
+                            <div class="stat-card">
+                                <div class="stat-value">847</div>
+                                <div class="stat-label">Total Items</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" style="color: #ef4444;">23</div>
+                                <div class="stat-label">Low Stock</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">3</div>
+                                <div class="stat-label">Warehouses</div>
+                            </div>
+                        </div>
+                        <div class="section-title">Low Stock Alerts</div>
+                        <div class="list-item"
+                            onclick="openStockDetail('Steel Rod 10mm', 'SR-10MM', '15', '100', 'Warehouse A')">
+                            <div class="list-icon" style="background: #fee2e2; color: #ef4444;"><i
+                                    class="fas fa-exclamation-triangle"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">Steel Rod 10mm</div>
+                                <div class="list-subtitle">SKU: SR-10MM • Warehouse A</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">15 pcs</div><span
+                                    class="list-status status-urgent">Critical</span>
+                            </div>
+                        </div>
+                        <div class="list-item"
+                            onclick="openStockDetail('Lubricant Oil 5L', 'LO-5L', '8', '50', 'Warehouse B')">
+                            <div class="list-icon" style="background: #fef3c7; color: #f59e0b;"><i
+                                    class="fas fa-exclamation-triangle"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">Lubricant Oil 5L</div>
+                                <div class="list-subtitle">SKU: LO-5L • Warehouse B</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">8 units</div><span
+                                    class="list-status status-pending">Low</span>
+                            </div>
+                        </div>
+                        <div class="list-item"
+                            onclick="openStockDetail('Bearing 6205', 'BR-6205', '25', '100', 'Warehouse A')">
+                            <div class="list-icon" style="background: #fef3c7; color: #f59e0b;"><i
+                                    class="fas fa-exclamation-triangle"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">Bearing 6205</div>
+                                <div class="list-subtitle">SKU: BR-6205 • Warehouse A</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-amount">25 pcs</div><span class="list-status status-pending">Low</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Requests Tab -->
+                    <div class="tab-content">
+                        <div class="section-title">Pending Requests</div>
+                        <div class="list-item"
+                            onclick="openMRDetail('MR-2024-089', 'Production Line A', '5', 'Pending')">
+                            <div class="list-icon" style="background: #dbeafe; color: #3b82f6;"><i
+                                    class="fas fa-clipboard-list"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">MR-2024-089</div>
+                                <div class="list-subtitle">Production Line A • 5 items</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-pending">Pending</span></div>
+                        </div>
+                        <div class="list-item" onclick="openMRDetail('MR-2024-088', 'Maintenance', '3', 'Approved')">
+                            <div class="list-icon" style="background: #ecfdf5; color: #10b981;"><i
+                                    class="fas fa-clipboard-check"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">MR-2024-088</div>
+                                <div class="list-subtitle">Maintenance • 3 items</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-approved">Approved</span></div>
+                        </div>
+                    </div>
+                    <!-- Issues Tab -->
+                    <div class="tab-content">
+                        <div class="section-title">Recent Issues</div>
+                        <div class="list-item" onclick="openIssueDetail('MI-2024-045', 'Production Line B', '8')">
+                            <div class="list-icon" style="background: #ecfdf5; color: #10b981;"><i
+                                    class="fas fa-dolly"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">MI-2024-045</div>
+                                <div class="list-subtitle">Production Line B • 8 items</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-approved">Issued</span></div>
+                        </div>
+                        <div class="list-item" onclick="openIssueDetail('MI-2024-044', 'Maintenance Dept', '4')">
+                            <div class="list-icon" style="background: #ecfdf5; color: #10b981;"><i
+                                    class="fas fa-dolly"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">MI-2024-044</div>
+                                <div class="list-subtitle">Maintenance Dept • 4 items</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-approved">Issued</span></div>
+                        </div>
+                    </div>
+                    <!-- Receipt Tab -->
+                    <div class="tab-content">
+                        <div class="section-title">Goods Receipt</div>
+                        <div class="quick-actions">
+                            <div class="quick-action" onclick="openModal('goodsReceipt')"><i class="fas fa-box-open"></i><span>Process Receipt</span></div>
+                        </div>
+                        <div class="list-item" onclick="openGoodsReceiptDetail('PO-2024-892', 'ASN-2024-156', 'Steel Suppliers', '12', 'Pending')">
+                            <div class="list-icon" style="background: #dbeafe; color: #3b82f6;"><i class="fas fa-truck"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">PO-2024-892</div>
+                                <div class="list-subtitle">Steel Suppliers • ASN-2024-156</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-pending">Security Check</span></div>
+                        </div>
+                        <div class="list-item" onclick="openGoodsReceiptDetail('PO-2024-891', 'ASN-2024-155', 'Parts Corp', '8', 'Quality Check')">
+                            <div class="list-icon" style="background: #fef3c7; color: #f59e0b;"><i class="fas fa-clipboard-check"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">PO-2024-891</div>
+                                <div class="list-subtitle">Parts Corp • ASN-2024-155</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-info">Quality Check</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fab" onclick="openModal('goodsReceipt')"><i class="fas fa-box-open"></i></div>
+            </div>

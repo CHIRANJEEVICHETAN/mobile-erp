@@ -1,0 +1,136 @@
+            <!-- ============================= -->
+            <!-- Dashboard Screen              -->
+            <!-- ============================= -->
+            <div class="screen active" id="dashboard">
+                <div class="header">
+                    <div class="header-top">
+                        <div>
+                            <h1>Mobile ERP</h1>
+                            <p>Good morning, Admin!</p>
+                        </div>
+                        <div class="header-icon" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+                    </div>
+                </div>
+                <div class="kpi-grid">
+                    <div class="kpi-card" onclick="showScreenDynamic('sales')">
+                        <div class="kpi-icon sales"><i class="fas fa-dollar-sign"></i></div>
+                        <div class="kpi-value">₹12.4L</div>
+                        <div class="kpi-label">Today's Sales</div>
+                        <div class="kpi-change">↑ 12% from yesterday</div>
+                    </div>
+                    <div class="kpi-card" onclick="showScreenDynamic('inventory')">
+                        <div class="kpi-icon inventory"><i class="fas fa-boxes"></i></div>
+                        <div class="kpi-value">847</div>
+                        <div class="kpi-label">Finished Goods Available</div>
+                        <div class="kpi-change negative">↓ 23 low stock alerts</div>
+                    </div>
+                    <div class="kpi-card" onclick="showScreenDynamic('finance')">
+                        <div class="kpi-icon finance"><i class="fas fa-file-invoice"></i></div>
+                        <div class="kpi-value">₹8.2L</div>
+                        <div class="kpi-label">Pending Payments</div>
+                        <div class="kpi-change">15 invoices due</div>
+                    </div>
+                    <div class="kpi-card" onclick="showScreenDynamic('vendor')">
+                        <div class="kpi-icon vendor"><i class="fas fa-truck"></i></div>
+                        <div class="kpi-value">12</div>
+                        <div class="kpi-label">Pending POs</div>
+                        <div class="kpi-change">3 ASN to verify</div>
+                    </div>
+                </div>
+                <div class="role-selector">
+                    <div class="role-chip active" onclick="selectRole(this)">All</div>
+                    <div class="role-chip" onclick="selectRole(this)">Owner</div>
+                    <div class="role-chip" onclick="selectRole(this)">Sales</div>
+                    <div class="role-chip" onclick="selectRole(this)">Operations</div>
+                    <div class="role-chip" onclick="selectRole(this)">HR</div>
+                </div>
+                <div class="section-title">Quick Access</div>
+                <div class="module-grid">
+                    <div class="module-item" onclick="showScreenDynamic('sales')">
+                        <div class="module-icon green"><i class="fas fa-file-invoice-dollar"></i></div>
+                        <div class="module-label">Sales</div>
+                    </div>
+                    <div class="module-item" onclick="showScreenDynamic('inventory')">
+                        <div class="module-icon blue"><i class="fas fa-warehouse"></i></div>
+                        <div class="module-label">Inventory</div>
+                    </div>
+                    <div class="module-item" onclick="showScreenDynamic('vendor')">
+                        <div class="module-icon orange"><i class="fas fa-truck-loading"></i></div>
+                        <div class="module-label">Vendors</div>
+                    </div>
+                    <div class="module-item" onclick="showScreenDynamic('finance')">
+                        <div class="module-icon purple"><i class="fas fa-wallet"></i></div>
+                        <div class="module-label">Finance</div>
+                    </div>
+                    <div class="module-item" onclick="showScreenDynamic('maintenance')">
+                        <div class="module-icon teal"><i class="fas fa-tools"></i></div>
+                        <div class="module-label">Maintenance</div>
+                    </div>
+                    <div class="module-item" onclick="showScreenDynamic('hr')">
+                        <div class="module-icon pink"><i class="fas fa-user-friends"></i></div>
+                        <div class="module-label">HR</div>
+                    </div>
+                    <div class="module-item" onclick="showScreenDynamic('production')">
+                        <div class="module-icon indigo"><i class="fas fa-industry"></i></div>
+                        <div class="module-label">Production</div>
+                    </div>
+                    <div class="module-item" onclick="showScreenDynamic('visitor')">
+                        <div class="module-icon amber"><i class="fas fa-id-badge"></i></div>
+                        <div class="module-label">Visitors</div>
+                    </div>
+                    <div class="module-item" onclick="showScreenDynamic('security')">
+                        <div class="module-icon red"><i class="fas fa-shield-alt"></i></div>
+                        <div class="module-label">Security</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Sales Trend (Last 7 Days)</div>
+                        <div class="card-action" onclick="showScreenDynamic('sales')">View All</div>
+                    </div>
+                    <div class="chart-container">
+                        <div class="chart-bar" style="height: 60%"></div>
+                        <div class="chart-bar" style="height: 80%"></div>
+                        <div class="chart-bar" style="height: 45%"></div>
+                        <div class="chart-bar" style="height: 90%"></div>
+                        <div class="chart-bar" style="height: 70%"></div>
+                        <div class="chart-bar" style="height: 85%"></div>
+                        <div class="chart-bar" style="height: 95%"></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Recent Activities</div>
+                        <div class="card-action">See All</div>
+                    </div>
+                    <div class="list-item" onclick="openInvoiceDetail('INV-1234', 'ABC Corp', '45,000', 'Paid')">
+                        <div class="list-icon" style="background: #ecfdf5; color: #10b981;"><i class="fas fa-check"></i>
+                        </div>
+                        <div class="list-content">
+                            <div class="list-title">Invoice #1234 Paid</div>
+                            <div class="list-subtitle">ABC Corp • 10 mins ago</div>
+                        </div>
+                        <div class="list-value">
+                            <div class="list-amount">₹45,000</div>
+                        </div>
+                    </div>
+                    <div class="list-item" onclick="openPODetail('PO-892', 'Steel Suppliers', 'Pending GRN')">
+                        <div class="list-icon" style="background: #fef3c7; color: #f59e0b;"><i class="fas fa-truck"></i>
+                        </div>
+                        <div class="list-content">
+                            <div class="list-title">PO #892 Received</div>
+                            <div class="list-subtitle">Steel Suppliers • 1 hour ago</div>
+                        </div>
+                        <div class="list-value"><span class="list-status status-pending">Pending GRN</span></div>
+                    </div>
+                    <div class="list-item" onclick="openBreakdownDetail('Machine #5', 'Spindle Error')">
+                        <div class="list-icon" style="background: #fee2e2; color: #ef4444;"><i
+                                class="fas fa-exclamation"></i></div>
+                        <div class="list-content">
+                            <div class="list-title">Machine #5 Breakdown</div>
+                            <div class="list-subtitle">CNC Unit • 2 hours ago</div>
+                        </div>
+                        <div class="list-value"><span class="list-status status-urgent">Urgent</span></div>
+                    </div>
+                </div>
+            </div>

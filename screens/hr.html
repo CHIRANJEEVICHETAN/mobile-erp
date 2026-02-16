@@ -1,0 +1,114 @@
+            <!-- ============================= -->
+            <!-- HR Screen                     -->
+            <!-- ============================= -->
+            <div class="screen" id="hr">
+                <div class="sub-header">
+                    <div class="back-btn" onclick="showScreenDynamic('dashboard')"><i class="fas fa-arrow-left"></i></div>
+                    <h2>HR Management</h2>
+                </div>
+                <div class="tabs" id="hrTabs">
+                    <div class="tab active" onclick="switchTab('hrTabs', 'hrContent', 0)">Employees</div>
+                    <div class="tab" onclick="switchTab('hrTabs', 'hrContent', 1)">Attendance</div>
+                    <div class="tab" onclick="switchTab('hrTabs', 'hrContent', 2)">Leaves</div>
+                    <div class="tab" onclick="switchTab('hrTabs', 'hrContent', 3)">Payroll</div>
+                </div>
+                <div id="hrContent">
+                    <div class="tab-content active">
+                        <div class="stats-row">
+                            <div class="stat-card">
+                                <div class="stat-value">156</div>
+                                <div class="stat-label">Total Staff</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" style="color: #10b981;">142</div>
+                                <div class="stat-label">Present</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" style="color: #f59e0b;">8</div>
+                                <div class="stat-label">On Leave</div>
+                            </div>
+                        </div>
+                        <div class="search-bar"><i class="fas fa-search"></i><input type="text"
+                                placeholder="Search employees..."></div>
+                        <div class="section-title">Recent Employees</div>
+                        <div class="list-item"
+                            onclick="openEmployeeDetail('Amit Verma', 'AV', 'Machine Operator', 'Production', 'EMP-156')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">AV</div>
+                            <div class="list-content">
+                                <div class="list-title">Amit Verma</div>
+                                <div class="list-subtitle">Production • Machine Operator</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-subtitle">EMP-156</div>
+                            </div>
+                        </div>
+                        <div class="list-item"
+                            onclick="openEmployeeDetail('Sunita Mehra', 'SM', 'Accountant', 'Accounts', 'EMP-155')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #ec4899, #f43f5e);">SM</div>
+                            <div class="list-content">
+                                <div class="list-title">Sunita Mehra</div>
+                                <div class="list-subtitle">Accounts • Accountant</div>
+                            </div>
+                            <div class="list-value">
+                                <div class="list-subtitle">EMP-155</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="card">
+                            <div class="card-title">Today's Attendance</div>
+                            <div style="display: flex; justify-content: space-around; margin-top: 16px;">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 28px; font-weight: 700; color: #10b981;">142</div>
+                                    <div style="font-size: 12px; color: #64748b;">Present</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 28px; font-weight: 700; color: #ef4444;">6</div>
+                                    <div style="font-size: 12px; color: #64748b;">Absent</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 28px; font-weight: 700; color: #f59e0b;">8</div>
+                                    <div style="font-size: 12px; color: #64748b;">Leave</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="section-title">Pending Approvals</div>
+                        <div class="list-item"
+                            onclick="openLeaveDetail('Rahul Kumar', 'Casual Leave', '14-15 Feb', 'Pending')">
+                            <div class="avatar" style="background: linear-gradient(135deg, #10b981, #06b6d4);">RK</div>
+                            <div class="list-content">
+                                <div class="list-title">Rahul Kumar</div>
+                                <div class="list-subtitle">Casual Leave • 14-15 Feb</div>
+                            </div>
+                            <div class="list-value"><span class="list-status status-pending">Approve</span></div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="card">
+                            <div class="card-title">Payroll Summary - Feb 2024</div>
+                            <div style="margin-top: 16px;">
+                                <div
+                                    style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f5f9;">
+                                    <span style="color: #64748b;">Total Employees</span><span
+                                        style="font-weight: 600;">156</span></div>
+                                <div
+                                    style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f5f9;">
+                                    <span style="color: #64748b;">Gross Salary</span><span
+                                        style="font-weight: 600;">₹28,50,000</span></div>
+                                <div
+                                    style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f5f9;">
+                                    <span style="color: #64748b;">Deductions</span><span
+                                        style="font-weight: 600; color: #ef4444;">₹3,20,000</span></div>
+                                <div style="display: flex; justify-content: space-between; padding: 8px 0;"><span
+                                        style="font-weight: 600;">Net Payable</span><span
+                                        style="font-weight: 700; color: #10b981;">₹25,30,000</span></div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" style="margin: 16px;"
+                            onclick="showToast('Processing payroll...')">Process Payroll</button>
+                    </div>
+                </div>
+                <div class="fab" onclick="openModal('employee')"><i class="fas fa-user-plus"></i></div>
+            </div>
